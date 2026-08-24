@@ -1,5 +1,6 @@
 name: Collect Ctrip fares
 
+# 先用手动运行验证云端采集稳定性，再启用定时计划。
 on:
   workflow_dispatch:
 
