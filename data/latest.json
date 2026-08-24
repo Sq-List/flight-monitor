@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "status": "never_run",
+  "checked_at": null,
+  "query": {
+    "from": "HGH",
+    "to": "URC",
+    "depart_date": "2026-10-01",
+    "return_date": "2026-10-08"
+  },
+  "current": null,
+  "last_success": null,
+  "error": null
+}
