@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "failed",
-  "checked_at": "2026-08-24T15:34:38.023+08:00",
+  "checked_at": "2026-08-24T16:54:32.315+08:00",
   "query": {
     "from": "HGH",
     "to": "URC",

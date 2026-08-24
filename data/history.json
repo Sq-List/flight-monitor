@@ -28,5 +28,20 @@
       "code": "captcha",
       "message": "携程返回验证码或访问验证页面"
     }
+  },
+  {
+    "checked_at": "2026-08-24T16:54:32.315+08:00",
+    "status": "failed",
+    "query": {
+      "from": "HGH",
+      "to": "URC",
+      "depart_date": "2026-10-01",
+      "return_date": "2026-10-08"
+    },
+    "current": null,
+    "error": {
+      "code": "captcha",
+      "message": "携程返回验证码或访问验证页面"
+    }
   }
 ]
