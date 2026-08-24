@@ -36,7 +36,9 @@ jobs:
       - name: Collect fares
         id: collect
         continue-on-error: true
-        run: npm run collect
+        env:
+          FLIGHT_MONITOR_HEADLESS: 'false'
+        run: xvfb-run --auto-servernum npm run collect
 
       - name: Commit run data
         if: always() && steps.collect.outcome != 'skipped'
