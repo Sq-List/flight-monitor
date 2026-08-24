@@ -18,7 +18,7 @@ export function buildSearchUrl(query) {
 
 // 优先识别验证码，再判断页面是否已经渲染出可解析的航班卡片。
 export function classifyPageState({ url, bodyText, cardCount }) {
-  if (url.includes('captcha') || /验证码|安全验证|verify the human|访问频繁/i.test(bodyText)) {
+  if (url.includes('captcha') || /验证码|安全验证|verify the human|访问频繁|whaleguard\s+block/i.test(bodyText)) {
     return 'captcha';
   }
   if (cardCount > 0 && /\d{1,2}:\d{2}/.test(bodyText) && /[¥$€£]/.test(bodyText)) {

@@ -34,6 +34,17 @@ test('classifies captcha before rendered cards', () => {
   );
 });
 
+test('classifies Ctrip whaleguard as an access block', () => {
+  assert.equal(
+    classifyPageState({
+      url: 'https://flights.ctrip.com/online/list',
+      bodyText: 'whaleguard block',
+      cardCount: 0,
+    }),
+    'captcha',
+  );
+});
+
 test('classifies rendered flight cards as content', () => {
   assert.equal(
     classifyPageState({
