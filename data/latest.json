@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "status": "never_run",
-  "checked_at": null,
+  "status": "failed",
+  "checked_at": "2026-08-24T15:32:01.201+08:00",
   "query": {
     "from": "HGH",
     "to": "URC",
@@ -10,5 +10,8 @@
   },
   "current": null,
   "last_success": null,
-  "error": null
+  "error": {
+    "code": "cards_not_found",
+    "message": "页面未发现有效航班卡片"
+  }
 }
