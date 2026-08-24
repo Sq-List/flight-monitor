@@ -13,5 +13,20 @@
       "code": "cards_not_found",
       "message": "页面未发现有效航班卡片"
     }
+  },
+  {
+    "checked_at": "2026-08-24T15:34:38.023+08:00",
+    "status": "failed",
+    "query": {
+      "from": "HGH",
+      "to": "URC",
+      "depart_date": "2026-10-01",
+      "return_date": "2026-10-08"
+    },
+    "current": null,
+    "error": {
+      "code": "captcha",
+      "message": "携程返回验证码或访问验证页面"
+    }
   }
 ]
