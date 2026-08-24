@@ -7,6 +7,7 @@ import {
   buildSearchUrl,
   classifyPageState,
   extractCardChunks,
+  headlessFromEnvironment,
 } from '../src/collector.js';
 
 const query = {
@@ -53,6 +54,17 @@ test('classifies rendered flight cards as content', () => {
       cardCount: 2,
     }),
     'content',
+  );
+});
+
+test('uses headless Chromium by default', () => {
+  assert.equal(headlessFromEnvironment({}), true);
+});
+
+test('uses visible Chromium only when explicitly disabled', () => {
+  assert.equal(
+    headlessFromEnvironment({ FLIGHT_MONITOR_HEADLESS: 'false' }),
+    false,
   );
 });
 

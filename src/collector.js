@@ -8,6 +8,11 @@ function collectionError(code, message) {
   return Object.assign(new Error(message), { code });
 }
 
+// 只有任务明确关闭无头模式时才显示浏览器，其他调用保持现有默认行为。
+export function headlessFromEnvironment(environment = process.env) {
+  return environment.FLIGHT_MONITOR_HEADLESS !== 'false';
+}
+
 // 根据固定查询条件构造携程往返航班页面地址。
 export function buildSearchUrl(query) {
   const route = `${query.from.toLowerCase()}-${query.to.toLowerCase()}`;
@@ -63,7 +68,7 @@ export async function collectQuotes({ query, artifactDir = 'artifacts' }) {
   let browser;
   let page;
   try {
-    browser = await chromium.launch({ headless: true });
+    browser = await chromium.launch({ headless: headlessFromEnvironment() });
     page = await browser.newPage({ locale: 'zh-CN', timezoneId: 'Asia/Shanghai' });
     try {
       await page.goto(sourceUrl, { waitUntil: 'domcontentloaded', timeout: 45000 });
