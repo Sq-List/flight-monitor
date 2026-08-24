@@ -1,24 +1,29 @@
 # flight-monitor
 
-使用 GitHub Actions 验证携程往返机票页面能否从云端稳定采集。
+在当前 Mac 的已登录桌面会话中使用可见 Chromium 采集携程往返价格，并把最新结果与完整历史发布到 GitHub。
 
-## 当前状态
+## 运行时间
 
-GitHub Actions 已配置为在虚拟显示器中运行可见模式 Chromium，避免本地验证中无头模式触发的 `whaleguard block`。当前仍只支持手动运行；最新采集结果以 [`data/latest.json`](data/latest.json) 为准，连续验证稳定后再启用定时计划。
+- 用户登录时尝试一次
+- 每天 10:30、14:30、18:30
+- 计划时间处于睡眠状态时，唤醒后补跑一次
+- 距最近一次采集不足两小时则跳过
 
-当前固定查询：
+Mac 关机、退出登录或没有网络时无法采集；系统不会为了监控主动唤醒或阻止睡眠。采集时 Chromium 窗口可能短暂出现。
+
+## 查询范围
 
 - 杭州（HGH）→ 乌鲁木齐（URC）
 - 去程：2026-10-01
 - 返程：2026-10-08
 
-## 手动运行
+第一版读取“选择去程”页面显示的往返总价，不选择具体返程航班。
 
-打开仓库的 **Actions → Collect Ctrip fares → Run workflow**。
+## 数据
 
-运行结果：
+- [`data/latest.json`](data/latest.json)：本轮状态和最近一次成功报价
+- [`data/history.json`](data/history.json)：成功与失败的全部运行历史
 
-- [`data/latest.json`](data/latest.json)：本轮状态和最近一次成功报价。
-- [`data/history.json`](data/history.json)：包含成功和失败的全部运行历史。
+页面触发访问验证时记录 `captcha`，保留最近一次成功报价，不把旧价格冒充为本轮实时价格。
 
-第一版只读取选择去程页面显示的往返总价，不选择具体返程航班。采集失败时，Actions 会保留最近一次有效报价并上传七天有效的诊断附件。
+GitHub 托管 Actions 已证明会触发携程风控，只保留作手动诊断，不承担定时监控。
