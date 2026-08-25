@@ -1,19 +1,22 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-
 import { chromium } from 'playwright';
 
-import { parseFlightCards } from './parser.js';
-
-function collectionError(code, message) {
-  return Object.assign(new Error(message), { code });
-}
+import { createCtripPageSession } from './ctrip-page.js';
+import {
+  launchVisibleChromiumInBackground,
+} from './macos-focus.js';
+import {
+  isEligibleOutbound,
+  isEligibleReturn,
+  rankItineraries,
+  selectOutboundCandidates,
+} from './itinerary.js';
 
 // 只有任务明确关闭无头模式时才显示浏览器，其他调用保持现有默认行为。
 export function headlessFromEnvironment(environment = process.env) {
   return environment.FLIGHT_MONITOR_HEADLESS !== 'false';
 }
 
-// 根据固定查询条件构造携程往返航班页面地址。
+// 根据查询条件构造携程往返航班页面地址。
 export function buildSearchUrl(query) {
   const route = `${query.from.toLowerCase()}-${query.to.toLowerCase()}`;
   return `https://flights.ctrip.com/online/list/round-${route}`
@@ -21,80 +24,157 @@ export function buildSearchUrl(query) {
     + '&cabin=Y_S_C_F&adult=1&child=0&infant=0';
 }
 
-// 优先识别验证码，再判断页面是否已经渲染出可解析的航班卡片。
-export function classifyPageState({ url, bodyText, cardCount }) {
-  if (url.includes('captcha') || /验证码|安全验证|verify the human|访问频繁|whaleguard\s+block/i.test(bodyText)) {
-    return 'captcha';
+// 当前 Mac 的可见模式从启动开始置于后台；其余模式沿用 Playwright 启动。
+export async function launchBrowserForCollection({
+  headless,
+  platform = process.platform,
+} = {}) {
+  if (!headless && platform === 'darwin') {
+    return launchVisibleChromiumInBackground();
   }
-  if (cardCount > 0 && /\d{1,2}:\d{2}/.test(bodyText) && /[¥$€£]/.test(bodyText)) {
-    return 'content';
-  }
-  return 'empty';
+  return chromium.launch({ headless });
 }
 
-// 按 DOM 中的显示顺序提取每张航班卡片的文本片段，供纯函数解析器处理。
-export async function extractCardChunks(page) {
-  return page.locator('.flight-item').evaluateAll((cards) => cards.map((card) => {
-    const chunks = [];
-    const walk = (node) => {
-      for (const child of node.childNodes) {
-        if (child.nodeType === Node.TEXT_NODE) {
-          const text = (child.textContent || '').replace(/\s+/g, ' ').trim();
-          if (text) chunks.push(text);
-        } else if (child.nodeType === Node.ELEMENT_NODE) {
-          walk(child);
-        }
-      }
-    };
-    walk(card);
-    return chunks;
-  }));
+function normalizedError(error, date) {
+  return {
+    date,
+    stage: error?.stage ?? 'outbound_list',
+    code: error?.code ?? 'unexpected',
+    message: error instanceof Error ? error.message : String(error),
+  };
 }
 
-async function saveFailureArtifacts(page, artifactDir, sourceUrl) {
-  await mkdir(artifactDir, { recursive: true });
-  let bodyText = '';
-  if (page) {
-    await page.screenshot({ path: `${artifactDir}/failure.png`, fullPage: true }).catch(() => {});
-    bodyText = await page.locator('body').innerText().catch(() => '');
-  }
-  const summary = `URL: ${sourceUrl}\n\n${bodyText.slice(0, 4000)}`;
-  await writeFile(`${artifactDir}/failure-summary.txt`, summary, 'utf8');
+function publicLeg({ signature, price, ...leg }) {
+  return leg;
 }
 
-// 启动匿名 Chromium 读取携程动态页面，失败时只保存截图和截断后的可见文本。
-export async function collectQuotes({ query, artifactDir = 'artifacts' }) {
-  const sourceUrl = buildSearchUrl(query);
-  let browser;
-  let page;
+function deadlineError() {
+  return Object.assign(new Error('整轮采集超过时间上限'), {
+    code: 'run_timeout',
+    stage: 'run_timeout',
+  });
+}
+
+async function withinDeadline(promise, deadline) {
+  const remaining = deadline - Date.now();
+  if (remaining <= 0) throw deadlineError();
+  let timer;
   try {
-    browser = await chromium.launch({ headless: headlessFromEnvironment() });
-    page = await browser.newPage({ locale: 'zh-CN', timezoneId: 'Asia/Shanghai' });
-    try {
-      await page.goto(sourceUrl, { waitUntil: 'domcontentloaded', timeout: 45000 });
-    } catch (error) {
-      if (error?.name === 'TimeoutError') {
-        throw collectionError('navigation_timeout', '携程页面未在 45 秒内打开');
-      }
-      throw error;
-    }
-
-    await page.waitForTimeout(18000);
-    const bodyText = await page.locator('body').innerText().catch(() => '');
-    const cardCount = await page.locator('.flight-item').count();
-    const state = classifyPageState({ url: page.url(), bodyText, cardCount });
-    if (state === 'captcha') throw collectionError('captcha', '携程返回验证码或访问验证页面');
-    if (state !== 'content') throw collectionError('cards_not_found', '页面未发现有效航班卡片');
-
-    const chunks = await extractCardChunks(page);
-    const quotes = parseFlightCards(chunks, sourceUrl);
-    if (quotes.length === 0) throw collectionError('quotes_invalid', '航班卡片没有有效正数价格');
-    return quotes;
-  } catch (error) {
-    await saveFailureArtifacts(page, artifactDir, sourceUrl);
-    if (error?.code) throw error;
-    throw collectionError('unexpected', error instanceof Error ? error.message : String(error));
+    return await Promise.race([
+      promise,
+      new Promise((resolve, reject) => {
+        timer = setTimeout(() => reject(deadlineError()), remaining);
+      }),
+    ]);
   } finally {
-    await browser?.close();
+    clearTimeout(timer);
+  }
+}
+
+// 顺序扫描两个去程日期；单日失败不丢弃另一日期已经完成的有效组合。
+export async function collectItineraries({
+  queries,
+  session,
+  timeoutMs = 600_000,
+  logger = () => {},
+  now = Date.now,
+}) {
+  const scans = [];
+  const combinations = [];
+  const errors = [];
+  const deadline = Date.now() + timeoutMs;
+  const runStartedAt = now();
+
+  for (let queryIndex = 0; queryIndex < queries.length; queryIndex += 1) {
+    const query = queries[queryIndex];
+    const dateStartedAt = now();
+    try {
+      const allOutbounds = await withinDeadline(
+        session.listOutbounds(query),
+        deadline,
+      );
+      const eligibleCount = allOutbounds.filter(isEligibleOutbound).length;
+      const outbounds = selectOutboundCandidates(allOutbounds);
+      logger(
+        `[${query.depart_date}] 合格去程 ${eligibleCount}，选取 ${outbounds.length}`,
+      );
+
+      for (let index = 0; index < outbounds.length; index += 1) {
+        const outbound = outbounds[index];
+        logger(
+          `[${query.depart_date}] 候选 ${index + 1}/${outbounds.length} `
+          + `${outbound.flight_no} ${outbound.departure_time}→${outbound.arrival_time}`,
+        );
+        const returns = (await withinDeadline(
+          session.listReturns(query, outbound),
+          deadline,
+        )).filter(isEligibleReturn);
+        let accepted = 0;
+        for (const returnLeg of returns) {
+          if (!returnLeg.price) continue;
+          combinations.push({
+            ...returnLeg.price,
+            outbound: publicLeg(outbound),
+            return: publicLeg(returnLeg),
+          });
+          accepted += 1;
+        }
+        logger(
+          `[${query.depart_date}] ${outbound.flight_no} 有效返程 ${accepted}，`
+          + `累计组合 ${combinations.length}`,
+        );
+      }
+      scans.push({ date: query.depart_date, status: 'completed' });
+      logger(
+        `[${query.depart_date}] 日期完成，耗时 ${now() - dateStartedAt}ms`,
+      );
+    } catch (error) {
+      const normalized = normalizedError(error, query.depart_date);
+      scans.push({ date: query.depart_date, status: 'failed' });
+      errors.push(normalized);
+      logger(
+        `[${query.depart_date}] 失败 ${normalized.stage}/${normalized.code}: `
+        + normalized.message,
+      );
+      if (normalized.code === 'run_timeout') {
+        for (const remainingQuery of queries.slice(queryIndex + 1)) {
+          scans.push({ date: remainingQuery.depart_date, status: 'failed' });
+        }
+        break;
+      }
+    }
+  }
+
+  logger(`整轮完成，耗时 ${now() - runStartedAt}ms，累计组合 ${combinations.length}`);
+
+  return {
+    scans,
+    itineraries: rankItineraries(combinations),
+    errors,
+  };
+}
+
+// 启动当前环境的 Chromium，并确保成功、失败或超时后都关闭浏览器。
+export async function collectFromCtrip({
+  queries,
+  artifactDir = 'artifacts',
+  timeoutMs = 600_000,
+  launchBrowser = launchBrowserForCollection,
+  createSession = createCtripPageSession,
+  logger = console.log,
+  environment = process.env,
+  platform = process.platform,
+}) {
+  const headless = headlessFromEnvironment(environment);
+  const browser = await launchBrowser({ headless, platform });
+  try {
+    const page = await browser.newPage({
+      locale: 'zh-CN',
+      timezoneId: 'Asia/Shanghai',
+    });
+    const session = createSession({ page, buildSearchUrl, artifactDir });
+    return await collectItineraries({ queries, session, timeoutMs, logger });
+  } finally {
+    await browser.close();
   }
 }

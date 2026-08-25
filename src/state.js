@@ -1,50 +1,53 @@
-function successfulCurrent(quotes) {
-  const best = quotes.reduce((lowest, quote) =>
-    quote.price < lowest.price ? quote : lowest,
-  );
-
+function currentFrom(itineraries) {
   return {
-    best_price: best.price,
-    currency: best.currency,
-    quotes,
+    availability: itineraries.length > 0 ? 'available' : 'none',
+    best_total_price: itineraries[0]?.total_price ?? null,
+    currency: itineraries[0]?.currency ?? 'CNY',
+    itineraries,
   };
 }
 
-// 根据本次采集结果生成最新状态，并将本次运行追加到完整历史中。
+function previousFullLastSuccess(previousLatest) {
+  return previousLatest?.schema_version === 2
+    && previousLatest?.collection_scope === 'full_itinerary'
+    ? previousLatest.last_success ?? null
+    : null;
+}
+
+// 生成完整行程 schema v2；旧起价历史保留，但不能成为 v2 的最近成功结果。
 export function buildNextState({
   previousLatest,
   history,
-  query,
+  queries,
   checkedAt,
-  quotes = null,
-  error = null,
+  collection,
 }) {
-  const success = Array.isArray(quotes) && quotes.length > 0 && error === null;
-  const current = success ? successfulCurrent(quotes) : null;
-  const lastSuccess = success
+  const completed = collection.scans.filter(
+    (scan) => scan.status === 'completed',
+  ).length;
+  const status = completed === queries.length
+    ? 'success'
+    : completed > 0
+      ? 'partial'
+      : 'failed';
+  const current = status === 'failed' ? null : currentFrom(collection.itineraries);
+  const isFullSuccess = status === 'success' && collection.itineraries.length > 0;
+  const lastSuccess = isFullSuccess
     ? { checked_at: checkedAt, ...current }
-    : previousLatest?.last_success ?? null;
-  const normalizedError = success ? null : error;
-
-  const latest = {
-    schema_version: 1,
-    status: success ? 'success' : 'failed',
+    : previousFullLastSuccess(previousLatest);
+  const entry = {
+    schema_version: 2,
+    collection_scope: 'full_itinerary',
+    status,
     checked_at: checkedAt,
-    query,
+    queries,
+    scans: collection.scans,
     current,
-    last_success: lastSuccess,
-    error: normalizedError,
-  };
-  const historyEntry = {
-    checked_at: checkedAt,
-    status: latest.status,
-    query,
-    current,
-    error: normalizedError,
+    errors: collection.errors,
   };
 
   return {
-    latest,
-    history: [...history, historyEntry],
+    latest: { ...entry, last_success: lastSuccess },
+    history: [...history, entry],
   };
 }

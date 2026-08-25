@@ -18,27 +18,45 @@ async function writeJson(path, value) {
 // 执行一次采集并持久化结果；采集失败也必须写入历史和最新状态。
 export async function runCollection({
   collect,
-  query,
+  queries,
   checkedAt,
   latestPath,
   historyPath,
 }) {
   const previousLatest = await readJson(latestPath, null);
   const history = await readJson(historyPath, []);
-  let quotes = null;
-  let error = null;
+  let collection;
 
   try {
-    quotes = await collect({ query });
-  } catch (caught) {
-    error = {
-      code: caught?.code ?? 'unexpected',
-      message: caught instanceof Error ? caught.message : String(caught),
+    collection = await collect({ queries });
+  } catch (error) {
+    collection = {
+      scans: queries.map((query) => ({
+        date: query.depart_date,
+        status: 'failed',
+      })),
+      itineraries: [],
+      errors: [{
+        date: null,
+        stage: error?.stage ?? 'outbound_list',
+        code: error?.code ?? 'unexpected',
+        message: error instanceof Error ? error.message : String(error),
+      }],
     };
   }
 
-  const next = buildNextState({ previousLatest, history, query, checkedAt, quotes, error });
+  const next = buildNextState({
+    previousLatest,
+    history,
+    queries,
+    checkedAt,
+    collection,
+  });
   await writeJson(latestPath, next.latest);
   await writeJson(historyPath, next.history);
-  return { ok: error === null, error };
+  return {
+    ok: next.latest.status === 'success',
+    status: next.latest.status,
+    errors: next.latest.errors,
+  };
 }

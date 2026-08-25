@@ -3,53 +3,156 @@ import test from 'node:test';
 
 import { buildNextState } from '../src/state.js';
 
-const query = {
-  from: 'HGH',
-  to: 'URC',
-  depart_date: '2026-10-01',
-  return_date: '2026-10-08',
-};
-const quotes = [
-  { rank: 1, airline: '乌鲁木齐航空', price: 3538, currency: 'CNY' },
-  { rank: 2, airline: '中国南方航空', price: 3830, currency: 'CNY' },
+const queries = [
+  {
+    from: 'HGH',
+    to: 'URC',
+    depart_date: '2026-09-30',
+    return_date: '2026-10-08',
+  },
+  {
+    from: 'HGH',
+    to: 'URC',
+    depart_date: '2026-10-01',
+    return_date: '2026-10-08',
+  },
 ];
 
-test('stores a successful run as current, last success, and history', () => {
+const complete = {
+  rank: 1,
+  total_price: 3500,
+  price_text: '往返含税 ¥3500',
+  price_scope: 'itinerary_starting_price',
+  currency: 'CNY',
+  outbound: {
+    date: '2026-10-01',
+    airline: '测试航空',
+    flight_no: 'AB1234',
+    departure_time: '18:00',
+    departure_airport: '杭州萧山国际机场',
+    arrival_time: '00:40+1',
+    arrival_airport: '乌鲁木齐天山国际机场',
+    direct: true,
+    stops: [],
+  },
+  return: {
+    date: '2026-10-08',
+    airline: '测试航空',
+    flight_no: 'AB5678',
+    departure_time: '08:00',
+    departure_airport: '乌鲁木齐天山国际机场',
+    arrival_time: '15:00',
+    arrival_airport: '杭州萧山国际机场',
+    direct: true,
+    stops: [],
+  },
+};
+
+const legacyHistory = [{
+  checked_at: '2026-08-24T10:30:00+08:00',
+  status: 'success',
+  current: { best_price: 3538 },
+}];
+
+test('writes a full two-date success and preserves legacy history unchanged', () => {
+  const next = buildNextState({
+    previousLatest: { schema_version: 1, last_success: { best_price: 3538 } },
+    history: legacyHistory,
+    queries,
+    checkedAt: '2026-08-25T10:30:00+08:00',
+    collection: {
+      scans: queries.map((query) => ({
+        date: query.depart_date,
+        status: 'completed',
+      })),
+      itineraries: [complete],
+      errors: [],
+    },
+  });
+  assert.equal(next.latest.schema_version, 2);
+  assert.equal(next.latest.collection_scope, 'full_itinerary');
+  assert.equal(next.latest.status, 'success');
+  assert.equal(next.latest.current.best_total_price, 3500);
+  assert.equal(next.latest.last_success.best_total_price, 3500);
+  assert.deepEqual(next.history[0], legacyHistory[0]);
+  assert.equal(next.history[1].collection_scope, 'full_itinerary');
+});
+
+test('records success with availability none without replacing last success', () => {
+  const previous = {
+    schema_version: 2,
+    collection_scope: 'full_itinerary',
+    last_success: { best_total_price: 3500 },
+  };
+  const next = buildNextState({
+    previousLatest: previous,
+    history: [],
+    queries,
+    checkedAt: '2026-08-25T14:30:00+08:00',
+    collection: {
+      scans: queries.map((query) => ({
+        date: query.depart_date,
+        status: 'completed',
+      })),
+      itineraries: [],
+      errors: [],
+    },
+  });
+  assert.equal(next.latest.status, 'success');
+  assert.equal(next.latest.current.availability, 'none');
+  assert.equal(next.latest.last_success.best_total_price, 3500);
+});
+
+test('records partial with valid itineraries and preserves last success', () => {
+  const next = buildNextState({
+    previousLatest: {
+      schema_version: 2,
+      collection_scope: 'full_itinerary',
+      last_success: { best_total_price: 3600 },
+    },
+    history: [],
+    queries,
+    checkedAt: '2026-08-25T18:30:00+08:00',
+    collection: {
+      scans: [
+        { date: '2026-09-30', status: 'failed' },
+        { date: '2026-10-01', status: 'completed' },
+      ],
+      itineraries: [complete],
+      errors: [{
+        date: '2026-09-30',
+        stage: 'outbound_list',
+        code: 'captcha',
+        message: '验证码',
+      }],
+    },
+  });
+  assert.equal(next.latest.status, 'partial');
+  assert.equal(next.latest.current.best_total_price, 3500);
+  assert.equal(next.latest.last_success.best_total_price, 3600);
+});
+
+test('records failed when neither date completes', () => {
   const next = buildNextState({
     previousLatest: null,
     history: [],
-    query,
-    checkedAt: '2026-08-24T07:30:00+08:00',
-    quotes,
+    queries,
+    checkedAt: '2026-08-25T18:30:00+08:00',
+    collection: {
+      scans: queries.map((query) => ({
+        date: query.depart_date,
+        status: 'failed',
+      })),
+      itineraries: [],
+      errors: [{
+        date: null,
+        stage: 'run_timeout',
+        code: 'run_timeout',
+        message: '超时',
+      }],
+    },
   });
-
-  assert.equal(next.latest.status, 'success');
-  assert.equal(next.latest.current.best_price, 3538);
-  assert.equal(next.latest.last_success.checked_at, '2026-08-24T07:30:00+08:00');
-  assert.equal(next.history.length, 1);
-  assert.equal(next.history[0].status, 'success');
-});
-
-test('records a failed run without replacing the previous successful price', () => {
-  const success = buildNextState({
-    previousLatest: null,
-    history: [],
-    query,
-    checkedAt: '2026-08-24T07:30:00+08:00',
-    quotes,
-  });
-  const failed = buildNextState({
-    previousLatest: success.latest,
-    history: success.history,
-    query,
-    checkedAt: '2026-08-24T13:30:00+08:00',
-    error: { code: 'captcha', message: '携程返回验证码页面' },
-  });
-
-  assert.equal(failed.latest.status, 'failed');
-  assert.equal(failed.latest.current, null);
-  assert.equal(failed.latest.last_success.best_price, 3538);
-  assert.equal(failed.history.length, 2);
-  assert.equal(failed.history[1].status, 'failed');
-  assert.equal(failed.history[1].current, null);
+  assert.equal(next.latest.status, 'failed');
+  assert.equal(next.latest.current, null);
+  assert.equal(next.latest.last_success, null);
 });

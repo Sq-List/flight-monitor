@@ -6,12 +6,20 @@ import test from 'node:test';
 
 import { runCollection } from '../src/run.js';
 
-const query = {
-  from: 'HGH',
-  to: 'URC',
-  depart_date: '2026-10-01',
-  return_date: '2026-10-08',
-};
+const queries = [
+  {
+    from: 'HGH',
+    to: 'URC',
+    depart_date: '2026-09-30',
+    return_date: '2026-10-08',
+  },
+  {
+    from: 'HGH',
+    to: 'URC',
+    depart_date: '2026-10-01',
+    return_date: '2026-10-08',
+  },
+];
 
 async function stateFiles() {
   const dir = await mkdtemp(join(tmpdir(), 'flight-monitor-'));
@@ -22,30 +30,68 @@ async function stateFiles() {
   return { latestPath, historyPath };
 }
 
-test('persists successful quotes', async () => {
+test('persists a schema v2 successful scan', async () => {
   const paths = await stateFiles();
   const result = await runCollection({
-    collect: async () => [{ rank: 1, airline: '乌鲁木齐航空', price: 3538, currency: 'CNY' }],
-    query,
-    checkedAt: '2026-08-24T07:30:00+08:00',
+    collect: async () => ({
+      scans: queries.map((query) => ({
+        date: query.depart_date,
+        status: 'completed',
+      })),
+      itineraries: [],
+      errors: [],
+    }),
+    queries,
+    checkedAt: '2026-08-25T10:30:00+08:00',
     ...paths,
   });
   const latest = JSON.parse(await readFile(paths.latestPath, 'utf8'));
-
   assert.equal(result.ok, true);
-  assert.equal(latest.current.best_price, 3538);
+  assert.equal(latest.schema_version, 2);
+  assert.equal(latest.current.availability, 'none');
 });
 
-test('persists a typed collection failure and returns a failed result', async () => {
+test('persists partial data and returns a non-success result', async () => {
   const paths = await stateFiles();
   const result = await runCollection({
-    collect: async () => { throw Object.assign(new Error('验证码'), { code: 'captcha' }); },
-    query,
-    checkedAt: '2026-08-24T13:30:00+08:00',
+    collect: async () => ({
+      scans: [
+        { date: '2026-09-30', status: 'failed' },
+        { date: '2026-10-01', status: 'completed' },
+      ],
+      itineraries: [],
+      errors: [{
+        date: '2026-09-30',
+        stage: 'outbound_list',
+        code: 'captcha',
+        message: '验证码',
+      }],
+    }),
+    queries,
+    checkedAt: '2026-08-25T14:30:00+08:00',
     ...paths,
   });
   const latest = JSON.parse(await readFile(paths.latestPath, 'utf8'));
-
   assert.equal(result.ok, false);
-  assert.deepEqual(latest.error, { code: 'captcha', message: '验证码' });
+  assert.equal(result.status, 'partial');
+  assert.equal(latest.errors[0].code, 'captcha');
+});
+
+test('turns a collector crash into two failed scans', async () => {
+  const paths = await stateFiles();
+  const result = await runCollection({
+    collect: async () => {
+      throw Object.assign(new Error('浏览器启动失败'), {
+        code: 'browser_launch',
+        stage: 'outbound_list',
+      });
+    },
+    queries,
+    checkedAt: '2026-08-25T18:30:00+08:00',
+    ...paths,
+  });
+  const latest = JSON.parse(await readFile(paths.latestPath, 'utf8'));
+  assert.equal(result.status, 'failed');
+  assert.deepEqual(latest.scans.map((scan) => scan.status), ['failed', 'failed']);
+  assert.equal(latest.errors[0].code, 'browser_launch');
 });
