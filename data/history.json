@@ -485,5 +485,49 @@
       ]
     },
     "errors": []
+  },
+  {
+    "schema_version": 2,
+    "collection_scope": "full_itinerary",
+    "status": "partial",
+    "checked_at": "2026-08-25T18:30:14.165+08:00",
+    "queries": [
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-09-30",
+        "return_date": "2026-10-08"
+      },
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-10-01",
+        "return_date": "2026-10-08"
+      }
+    ],
+    "scans": [
+      {
+        "date": "2026-09-30",
+        "status": "completed"
+      },
+      {
+        "date": "2026-10-01",
+        "status": "failed"
+      }
+    ],
+    "current": {
+      "availability": "none",
+      "best_total_price": null,
+      "currency": "CNY",
+      "itineraries": []
+    },
+    "errors": [
+      {
+        "date": "2026-10-01",
+        "stage": "outbound_select",
+        "code": "unexpected",
+        "message": "locator.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('.flight-item').filter({ hasText: 'UQ2594' }).filter({ hasText: '18:25' }).filter({ hasText: '01:00' }).first().locator('.btn-book, [u_key=\"next_segment\"]').filter({ hasText: /选为去程|选择去程/ }).first()\n    - locator resolved to <div u_key=\"next_segment\" class=\"btn btn-book\" u_remark=\"航班上点击下一程进行普通反查[itineraryId:UQ2594_1790850300000GS7519_1791418500000][选为去程]\">选为去程</div>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n"
+      }
+    ]
   }
 ]
