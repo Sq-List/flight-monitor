@@ -165,5 +165,112 @@
       ]
     },
     "error": null
+  },
+  {
+    "checked_at": "2026-08-25T10:30:25.324+08:00",
+    "status": "success",
+    "query": {
+      "from": "HGH",
+      "to": "URC",
+      "depart_date": "2026-10-01",
+      "return_date": "2026-10-08"
+    },
+    "current": {
+      "best_price": 3538,
+      "currency": "CNY",
+      "quotes": [
+        {
+          "rank": 1,
+          "airline": "新海航｜乌鲁木齐航空",
+          "flight_no": "UQ2594",
+          "aircraft": "波音737(中)",
+          "departure_time": "18:25",
+          "departure_airport": "萧山国际机场",
+          "arrival_time": "01:00",
+          "arrival_airport": "+1天",
+          "terminal": null,
+          "price": 3538,
+          "currency": "CNY",
+          "cabin": null,
+          "source_url": "https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-10-01_2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0"
+        },
+        {
+          "rank": 2,
+          "airline": "南方航空",
+          "flight_no": "CZ8416",
+          "aircraft": "波音737(中)",
+          "departure_time": "19:20",
+          "departure_airport": "萧山国际机场",
+          "arrival_time": "00:40",
+          "arrival_airport": "+1天",
+          "terminal": null,
+          "price": 3830,
+          "currency": "CNY",
+          "cabin": null,
+          "source_url": "https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-10-01_2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0"
+        },
+        {
+          "rank": 3,
+          "airline": "厦门航空",
+          "flight_no": "MF2431",
+          "aircraft": "波音737(中)",
+          "departure_time": "19:20",
+          "departure_airport": "萧山国际机场",
+          "arrival_time": "00:40",
+          "arrival_airport": "+1天",
+          "terminal": null,
+          "price": 3840,
+          "currency": "CNY",
+          "cabin": null,
+          "source_url": "https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-10-01_2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0"
+        },
+        {
+          "rank": 4,
+          "airline": "长龙航空",
+          "flight_no": null,
+          "aircraft": null,
+          "departure_time": "18:00",
+          "departure_airport": "萧山国际机场",
+          "arrival_time": "22:55",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "terminal": null,
+          "price": 3849,
+          "currency": "CNY",
+          "cabin": null,
+          "source_url": "https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-10-01_2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0"
+        },
+        {
+          "rank": 5,
+          "airline": "新海航｜天津航空",
+          "flight_no": null,
+          "aircraft": null,
+          "departure_time": "16:05",
+          "departure_airport": "萧山国际机场",
+          "arrival_time": "22:35",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "terminal": null,
+          "price": 3910,
+          "currency": "CNY",
+          "cabin": null,
+          "source_url": "https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-10-01_2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0"
+        },
+        {
+          "rank": 6,
+          "airline": "华夏航空",
+          "flight_no": null,
+          "aircraft": null,
+          "departure_time": "18:00",
+          "departure_airport": "萧山国际机场",
+          "arrival_time": "22:55",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "terminal": null,
+          "price": 3930,
+          "currency": "CNY",
+          "cabin": null,
+          "source_url": "https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-10-01_2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0"
+        }
+      ]
+    },
+    "error": null
   }
 ]
