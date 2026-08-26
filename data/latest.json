@@ -2,7 +2,7 @@
   "schema_version": 2,
   "collection_scope": "full_itinerary",
   "status": "failed",
-  "checked_at": "2026-08-26T14:30:35.747+08:00",
+  "checked_at": "2026-08-26T18:04:11.407+08:00",
   "queries": [
     {
       "from": "HGH",
@@ -33,7 +33,7 @@
       "date": null,
       "stage": "outbound_list",
       "code": "unexpected",
-      "message": "browserType.connectOverCDP: connect ECONNREFUSED 127.0.0.1:62280\nCall log:\n  - <ws preparing> retrieving websocket url from http://127.0.0.1:62280\n"
+      "message": "browserType.connectOverCDP: connect ECONNREFUSED 127.0.0.1:52389\nCall log:\n  - <ws preparing> retrieving websocket url from http://127.0.0.1:52389\n"
     }
   ],
   "last_success": {
