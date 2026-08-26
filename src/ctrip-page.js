@@ -102,9 +102,10 @@ export async function extractFlightCards(locator, date) {
 // 验证码优先于卡片判断，避免把拦截页上残留的航班节点当成有效内容。
 export function classifyCtripPage({ url, bodyText, cardCount }) {
   if (url.includes('captcha')
-    || /验证码|安全验证|访问频繁|whaleguard\s+block/i.test(bodyText)) {
+    || /安全验证|访问频繁|请完成验证|whaleguard\s+block/i.test(bodyText)) {
     return 'captcha';
   }
+  if (cardCount === 0 && /账号密码登录/.test(bodyText)) return 'login_required';
   if (cardCount > 0 && /\d{2}:\d{2}/.test(bodyText)) return 'content';
   return 'empty';
 }
@@ -119,7 +120,17 @@ export function safeArtifactName(date, signature, stage) {
 
 // 携程当前使用可点击 div 而不是 button，按真实 class 和文案定位去程操作。
 export async function clickSelectOutbound(card) {
-  const action = card.locator('.btn-book, [u_key="next_segment"]')
+  try {
+    await card.scrollIntoViewIfNeeded({ timeout: 15000 });
+  } catch (error) {
+    throw Object.assign(error, {
+      code: 'outbound_click_timeout',
+      stage: 'outbound_select',
+    });
+  }
+  const action = card.locator(
+    '.btn-book:visible, [u_key="next_segment"]:visible',
+  )
     .filter({ hasText: /选为去程|选择去程/ })
     .first();
   if (await action.count() !== 1) {
@@ -131,7 +142,12 @@ export async function clickSelectOutbound(card) {
   try {
     await action.click({ timeout: 15000 });
   } catch (error) {
-    throw Object.assign(error, { stage: 'outbound_select' });
+    throw Object.assign(error, {
+      code: error?.name === 'TimeoutError'
+        ? 'outbound_click_timeout'
+        : error?.code,
+      stage: 'outbound_select',
+    });
   }
 }
 
@@ -179,6 +195,12 @@ async function assertContent(page, stage) {
   if (state === 'captcha') {
     throw Object.assign(new Error('携程返回验证码或访问验证页面'), {
       code: 'captcha',
+      stage,
+    });
+  }
+  if (state === 'login_required') {
+    throw Object.assign(new Error('携程要求重新登录采集器专用浏览器'), {
+      code: 'login_required',
       stage,
     });
   }

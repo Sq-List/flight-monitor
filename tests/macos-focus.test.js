@@ -5,8 +5,14 @@ import {
   launchVisibleChromiumInBackground,
 } from '../src/macos-focus.js';
 
-test('opens a separate Chromium in the macOS background and connects over CDP', async () => {
+test('reuses a dedicated Chromium profile and its default context', async () => {
   const events = [];
+  const persistentContext = {
+    async newPage() {
+      events.push(['persistent-page']);
+      return { id: 'persistent-page' };
+    },
+  };
   const connectedBrowser = {
     async newBrowserCDPSession() {
       return {
@@ -23,6 +29,9 @@ test('opens a separate Chromium in the macOS background and connects over CDP', 
           return { id: 'page' };
         },
       };
+    },
+    contexts() {
+      return [persistentContext];
     },
     async close() {
       events.push(['browser-close']);
@@ -41,7 +50,9 @@ test('opens a separate Chromium in the macOS background and connects over CDP', 
   const browser = await launchVisibleChromiumInBackground({
     browserType,
     platform: 'darwin',
-    makeTempDir: async () => '/tmp/flight-monitor-profile',
+    profileDir: '/Users/test/Library/Application Support/flight-monitor/chromium-profile',
+    makeTempDir: async () => '/tmp/temporary-flight-monitor-profile',
+    ensureProfileDir: async (directory) => events.push(['ensure', directory]),
     waitForPort: async () => 9333,
     run: async (file, args) => events.push(['run', file, args]),
     removeDir: async (directory) => events.push(['remove', directory]),
@@ -60,19 +71,24 @@ test('opens a separate Chromium in the macOS background and connects over CDP', 
   ]);
   assert.equal(launch[2].includes('--remote-debugging-port=0'), true);
   assert.equal(
-    launch[2].includes('--user-data-dir=/tmp/flight-monitor-profile'),
+    launch[2].includes('--user-data-dir=/Users/test/Library/Application Support/flight-monitor/chromium-profile'),
     true,
   );
+  assert.deepEqual(events.find((event) => event[0] === 'ensure'), [
+    'ensure',
+    '/Users/test/Library/Application Support/flight-monitor/chromium-profile',
+  ]);
   assert.deepEqual(events.find((event) => event[0] === 'connect'), [
     'connect',
     'http://127.0.0.1:9333',
   ]);
-  assert.deepEqual(page, { id: 'page' });
+  assert.deepEqual(page, { id: 'persistent-page' });
+  assert.equal(events.some((event) => event[0] === 'context'), false);
   assert.deepEqual(
     events.find((event) => event[0] === 'send'),
     ['send', 'Browser.close'],
   );
-  assert.deepEqual(events.at(-1), ['remove', '/tmp/flight-monitor-profile']);
+  assert.equal(events.some((event) => event[0] === 'remove'), false);
 });
 
 test('uses regular visible Playwright launch outside macOS', async () => {

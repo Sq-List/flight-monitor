@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { mkdir, readFile } from 'node:fs/promises';
+import { homedir } from 'node:os';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { promisify } from 'node:util';
@@ -43,51 +43,48 @@ export async function launchVisibleChromiumInBackground({
   browserType = chromium,
   platform = process.platform,
   run = execFileAsync,
-  makeTempDir = () => mkdtemp(path.join(tmpdir(), 'flight-monitor-chromium-')),
+  profileDir = path.join(
+    homedir(),
+    'Library/Application Support/flight-monitor/chromium-profile',
+  ),
+  ensureProfileDir = (directory) => mkdir(directory, { recursive: true }),
   waitForPort = waitForDevToolsPort,
-  removeDir = (directory) => rm(directory, { recursive: true, force: true }),
 } = {}) {
   if (platform !== 'darwin') return browserType.launch({ headless: false });
 
-  const profileDir = await makeTempDir();
-  try {
-    const appBundle = applicationBundle(browserType.executablePath());
-    await run('open', [
-      '-g',
-      '-n',
-      '-a',
-      appBundle,
-      '--args',
-      '--remote-debugging-port=0',
-      `--user-data-dir=${profileDir}`,
-      '--no-first-run',
-      '--no-default-browser-check',
-      '--lang=zh-CN',
-      'about:blank',
-    ]);
-    const port = await waitForPort(profileDir);
-    const connectedBrowser = await browserType.connectOverCDP(
-      `http://127.0.0.1:${port}`,
-    );
-
-    let context;
-    return {
-      async newPage(options) {
-        context = await connectedBrowser.newContext(options);
-        return context.newPage();
-      },
-      async close() {
-        try {
-          const cdpSession = await connectedBrowser.newBrowserCDPSession();
-          await cdpSession.send('Browser.close');
-          await connectedBrowser.close().catch(() => {});
-        } finally {
-          await removeDir(profileDir).catch(() => {});
-        }
-      },
-    };
-  } catch (error) {
-    await removeDir(profileDir).catch(() => {});
-    throw error;
+  await ensureProfileDir(profileDir);
+  const appBundle = applicationBundle(browserType.executablePath());
+  await run('open', [
+    '-g',
+    '-n',
+    '-a',
+    appBundle,
+    '--args',
+    '--remote-debugging-port=0',
+    `--user-data-dir=${profileDir}`,
+    '--no-first-run',
+    '--no-default-browser-check',
+    '--lang=zh-CN',
+    'about:blank',
+  ]);
+  const port = await waitForPort(profileDir);
+  const connectedBrowser = await browserType.connectOverCDP(
+    `http://127.0.0.1:${port}`,
+  );
+  const context = connectedBrowser.contexts()[0];
+  if (!context) {
+    await connectedBrowser.close().catch(() => {});
+    throw new Error('后台 Chromium 未提供持久浏览器上下文');
   }
+
+  return {
+    async newPage() {
+      return context.newPage();
+    },
+    async close() {
+      const cdpSession = await connectedBrowser.newBrowserCDPSession();
+      await cdpSession.send('Browser.close');
+      await connectedBrowser.close().catch(() => {});
+    },
+  };
 }

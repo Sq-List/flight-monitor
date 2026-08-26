@@ -69,6 +69,34 @@ test('clicks Ctrip div.btn-book without requiring a button role', async (t) => {
   assert.equal(await page.evaluate(() => window.outboundSelected), true);
 });
 
+test('clicks the visible outbound action instead of waiting for a hidden duplicate', async (t) => {
+  const browser = await chromium.launch({ headless: true });
+  t.after(() => browser.close());
+  const page = await browser.newPage();
+  await page.setContent(`
+    <div class="flight-item">
+      <div id="hidden" class="btn-book" style="display: none">选为去程</div>
+      <div id="visible" class="btn-book">选为去程</div>
+    </div>
+  `);
+  await page.evaluate(() => {
+    window.clickedOutbound = null;
+    document.querySelector('#hidden').addEventListener('click', () => {
+      window.clickedOutbound = 'hidden';
+    });
+    document.querySelector('#visible').addEventListener('click', () => {
+      window.clickedOutbound = 'visible';
+    });
+    setTimeout(() => {
+      document.querySelector('#hidden').style.display = 'block';
+    }, 50);
+  });
+
+  await clickSelectOutbound(page.locator('.flight-item'));
+
+  assert.equal(await page.evaluate(() => window.clickedOutbound), 'visible');
+});
+
 test('accepts only an explicitly labelled round-trip total', () => {
   assert.deepEqual(parseExplicitTotalPrice('往返含税 ¥3,538'), {
     total_price: 3538,
@@ -107,6 +135,14 @@ test('classifies captcha before apparently rendered content', () => {
     bodyText: '安全验证',
     cardCount: 2,
   }), 'captcha');
+});
+
+test('classifies the Ctrip login dialog without treating 验证码登录 as captcha', () => {
+  assert.equal(classifyCtripPage({
+    url: 'https://flights.ctrip.com/online/list/round-hgh-urc',
+    bodyText: '账号密码登录 验证码登录 抱歉，未找到符合条件的航班',
+    cardCount: 0,
+  }), 'login_required');
 });
 
 test('creates an artifact name without URL or credential data', () => {

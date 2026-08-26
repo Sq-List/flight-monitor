@@ -99,34 +99,53 @@ export async function collectItineraries({
         `[${query.depart_date}] 合格去程 ${eligibleCount}，选取 ${outbounds.length}`,
       );
 
+      let candidateFailed = false;
       for (let index = 0; index < outbounds.length; index += 1) {
         const outbound = outbounds[index];
         logger(
           `[${query.depart_date}] 候选 ${index + 1}/${outbounds.length} `
           + `${outbound.flight_no} ${outbound.departure_time}→${outbound.arrival_time}`,
         );
-        const returns = (await withinDeadline(
-          session.listReturns(query, outbound),
-          deadline,
-        )).filter(isEligibleReturn);
-        let accepted = 0;
-        for (const returnLeg of returns) {
-          if (!returnLeg.price) continue;
-          combinations.push({
-            ...returnLeg.price,
-            outbound: publicLeg(outbound),
-            return: publicLeg(returnLeg),
-          });
-          accepted += 1;
+        try {
+          const returns = (await withinDeadline(
+            session.listReturns(query, outbound),
+            deadline,
+          )).filter(isEligibleReturn);
+          let accepted = 0;
+          for (const returnLeg of returns) {
+            if (!returnLeg.price) continue;
+            combinations.push({
+              ...returnLeg.price,
+              outbound: publicLeg(outbound),
+              return: publicLeg(returnLeg),
+            });
+            accepted += 1;
+          }
+          logger(
+            `[${query.depart_date}] ${outbound.flight_no} 有效返程 ${accepted}，`
+            + `累计组合 ${combinations.length}`,
+          );
+        } catch (error) {
+          const normalized = normalizedError(error, query.depart_date);
+          if (normalized.code === 'captcha' || normalized.code === 'run_timeout') {
+            throw error;
+          }
+          // 单个动态卡片失效时继续其余候选，但不能把本日标记为完整成功。
+          candidateFailed = true;
+          errors.push(normalized);
+          logger(
+            `[${query.depart_date}] ${outbound.flight_no} 候选失败 `
+            + `${normalized.stage}/${normalized.code}: ${normalized.message}`,
+          );
         }
-        logger(
-          `[${query.depart_date}] ${outbound.flight_no} 有效返程 ${accepted}，`
-          + `累计组合 ${combinations.length}`,
-        );
       }
-      scans.push({ date: query.depart_date, status: 'completed' });
+      scans.push({
+        date: query.depart_date,
+        status: candidateFailed ? 'failed' : 'completed',
+      });
       logger(
-        `[${query.depart_date}] 日期完成，耗时 ${now() - dateStartedAt}ms`,
+        `[${query.depart_date}] 日期${candidateFailed ? '部分失败' : '完成'}，`
+        + `耗时 ${now() - dateStartedAt}ms`,
       );
     } catch (error) {
       const normalized = normalizedError(error, query.depart_date);

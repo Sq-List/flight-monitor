@@ -136,6 +136,40 @@ test('stops one date on captcha and still completes the other date', async () =>
   assert.equal(result.itineraries.length, 1);
 });
 
+test('continues later candidates after one outbound click fails', async () => {
+  const attempts = [];
+  const session = {
+    async listOutbounds() {
+      return [
+        outbound('2026-10-01', 'AB1235', '18:00'),
+        outbound('2026-10-01', 'AB1236', '19:00'),
+      ];
+    },
+    async listReturns(_query, selectedOutbound) {
+      attempts.push(selectedOutbound.flight_no);
+      if (selectedOutbound.flight_no === 'AB1235') {
+        throw Object.assign(new Error('去程按钮点击超时'), {
+          code: 'outbound_click_timeout',
+          stage: 'outbound_select',
+        });
+      }
+      return [returnCard(3600)];
+    },
+  };
+
+  const result = await collectItineraries({
+    queries: [queries[1]],
+    session,
+    timeoutMs: 1000,
+  });
+
+  assert.deepEqual(attempts, ['AB1235', 'AB1236']);
+  assert.equal(result.itineraries.length, 1);
+  assert.equal(result.itineraries[0].total_price, 3600);
+  assert.deepEqual(result.scans, [{ date: '2026-10-01', status: 'failed' }]);
+  assert.equal(result.errors[0].code, 'outbound_click_timeout');
+});
+
 test('preserves the completed date when the second date reaches the total deadline', async () => {
   const session = {
     async listOutbounds(query) {
