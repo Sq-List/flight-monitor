@@ -9,6 +9,7 @@ import {
   isEligibleReturn,
   rankItineraries,
   selectOutboundCandidates,
+  validateCompleteItinerary,
 } from './itinerary.js';
 
 // 只有任务明确关闭无头模式时才显示浏览器，其他调用保持现有默认行为。
@@ -114,11 +115,14 @@ export async function collectItineraries({
           let accepted = 0;
           for (const returnLeg of returns) {
             if (!returnLeg.price) continue;
-            combinations.push({
+            const combination = {
               ...returnLeg.price,
               outbound: publicLeg(outbound),
               return: publicLeg(returnLeg),
-            });
+            };
+            // 只有最终能写入 JSON 的完整组合才计入有效返程和进度日志。
+            if (!validateCompleteItinerary(combination)) continue;
+            combinations.push(combination);
             accepted += 1;
           }
           logger(
