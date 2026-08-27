@@ -20,19 +20,19 @@ function applicationBundle(executablePath) {
 async function waitForDedicatedChromiumExit(profileDir, {
   run,
   sleep,
-  attempts = 50,
+  attempts = 150,
 }) {
   const processPattern = `--user-data-dir=${profileDir}`;
   for (let attempt = 0; attempt < attempts; attempt += 1) {
     try {
       await run('/usr/bin/pgrep', ['-f', '--', processPattern]);
     } catch (error) {
-      if (error?.code === 1) return;
+      if (error?.code === 1) return true;
       throw error;
     }
     await sleep(100);
   }
-  throw new Error('采集器专用 Chromium 未在 5 秒内退出');
+  return false;
 }
 
 // 只结束采集器专用配置对应的 Chromium，避免残留进程和旧端口污染下一轮。
@@ -42,18 +42,24 @@ async function cleanupDedicatedChromium(profileDir, {
   sleep,
 }) {
   const processPattern = `--user-data-dir=${profileDir}`;
+  const portFile = path.join(profileDir, 'DevToolsActivePort');
   try {
-    await run('/usr/bin/pkill', [
-      '-f',
-      '--',
-      processPattern,
-    ]);
-  } catch (error) {
-    // pkill 退出码 1 表示没有匹配进程，是正常的空闲状态。
-    if (error?.code !== 1) throw error;
+    try {
+      await run('/usr/bin/pkill', [
+        '-f',
+        '--',
+        processPattern,
+      ]);
+    } catch (error) {
+      // pkill 退出码 1 表示没有匹配进程，是正常的空闲状态。
+      if (error?.code !== 1) throw error;
+    }
+    if (!await waitForDedicatedChromiumExit(profileDir, { run, sleep })) {
+      throw new Error('采集器专用 Chromium 清理后仍未退出');
+    }
+  } finally {
+    await remove(portFile, { force: true });
   }
-  await waitForDedicatedChromiumExit(profileDir, { run, sleep });
-  await remove(path.join(profileDir, 'DevToolsActivePort'), { force: true });
 }
 
 // 等待 Chromium 在独立用户目录中写出随机调试端口。
@@ -124,18 +130,39 @@ export async function launchVisibleChromiumInBackground({
     if (!context) {
       throw new Error('后台 Chromium 未提供持久浏览器上下文');
     }
+    // 持久配置会恢复上次标签；每轮先清空，只留下本轮创建的采集页面。
+    await Promise.all(
+      context.pages().map((page) => page.close().catch(() => {})),
+    );
 
     return {
       async newPage() {
         return context.newPage();
       },
       async close() {
+        await Promise.all(
+          context.pages().map((page) => page.close().catch(() => {})),
+        );
         try {
-          const cdpSession = await connectedBrowser.newBrowserCDPSession();
-          await cdpSession.send('Browser.close');
+          try {
+            const cdpSession = await connectedBrowser.newBrowserCDPSession();
+            await cdpSession.send('Browser.close');
+          } catch {
+            // CDP 可能在浏览器正常退出时先断开，最终以专用进程状态为准。
+          } finally {
+            await connectedBrowser.close().catch(() => {});
+          }
+
+          const exited = await waitForDedicatedChromiumExit(profileDir, {
+            run,
+            sleep,
+          });
+          if (!exited) await cleanupProfile();
         } finally {
-          await connectedBrowser.close().catch(() => {});
-          await cleanupProfile();
+          await remove(
+            path.join(profileDir, 'DevToolsActivePort'),
+            { force: true },
+          );
         }
       },
     };
