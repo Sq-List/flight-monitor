@@ -212,6 +212,19 @@ async function assertContent(page, stage) {
   }
 }
 
+// 返程标题会早于异步航班卡片出现，等待真实卡片后再判断页面状态。
+async function waitForFlightCards(page, stage, timeoutMs = 30_000) {
+  try {
+    await page.locator('.flight-item').first().waitFor({
+      state: 'attached',
+      timeout: timeoutMs,
+    });
+  } catch {
+    // 超时后由统一页面分类给出验证码、登录或无卡片的准确错误。
+  }
+  await assertContent(page, stage);
+}
+
 async function saveFailureArtifacts(page, artifactDir, {
   date,
   signature = 'list',
@@ -281,7 +294,7 @@ export function createCtripPageSession({
         } catch (error) {
           throw Object.assign(error, { stage: 'return_list' });
         }
-        await assertContent(page, 'return_list');
+        await waitForFlightCards(page, 'return_list');
         await waitForStableCards(page);
         return await extractFlightCards(
           page.locator('.flight-item'),
