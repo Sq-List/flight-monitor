@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import test from 'node:test';
 
 import { chromium } from 'playwright';
@@ -7,6 +9,7 @@ import { chromium } from 'playwright';
 import {
   classifyCtripPage,
   clickSelectOutbound,
+  createCtripPageSession,
   extractFlightCards,
   parseExplicitTotalPrice,
   safeArtifactName,
@@ -95,6 +98,71 @@ test('clicks the visible outbound action instead of waiting for a hidden duplica
   await clickSelectOutbound(page.locator('.flight-item'));
 
   assert.equal(await page.evaluate(() => window.clickedOutbound), 'visible');
+});
+
+test('waits for return cards after the return header appears', async (t) => {
+  const browser = await chromium.launch({ headless: true });
+  t.after(() => browser.close());
+  const artifactDir = await mkdtemp(path.join(tmpdir(), 'flight-monitor-'));
+  t.after(() => rm(artifactDir, { recursive: true, force: true }));
+  const page = await browser.newPage();
+  const delayedReturnPage = `
+    <div id="step">1选择去程</div>
+    <div id="list">
+      <div class="flight-item">
+        <div class="airline-name">乌鲁木齐航空</div>
+        <div>UQ2594</div>
+        <div><span>18:25</span></div>
+        <div><span>01:00</span></div>
+        <div class="btn-book">选为去程</div>
+      </div>
+    </div>
+    <script>
+      document.querySelector('.btn-book').addEventListener('click', () => {
+        document.querySelector('#step').textContent = '2选择返程';
+        document.querySelector('#list').innerHTML = '<div class="skeleton">加载中</div>';
+        setTimeout(() => {
+          document.querySelector('#list').innerHTML = \`
+            <div class="flight-item">
+              <div class="airline-name">天津航空</div>
+              <div>GS7519</div>
+              <div class="depart"><span>08:15</span><span>天山机场T3</span></div>
+              <div class="arrive"><span>14:50</span><span>萧山机场T3</span></div>
+              <div class="price">¥3438起 往返总价</div>
+            </div>
+          \`;
+        }, 300);
+      });
+    </script>
+  `;
+  const url = `data:text/html;charset=utf-8,${encodeURIComponent(delayedReturnPage)}`;
+  const fastPage = new Proxy(page, {
+    get(target, property) {
+      if (property === 'waitForTimeout') return async () => {};
+      const value = Reflect.get(target, property);
+      return typeof value === 'function' ? value.bind(target) : value;
+    },
+  });
+  const session = createCtripPageSession({
+    page: fastPage,
+    buildSearchUrl: () => url,
+    artifactDir,
+  });
+
+  const returns = await session.listReturns({
+    depart_date: '2026-10-01',
+    return_date: '2026-10-08',
+  }, {
+    airline: '乌鲁木齐航空',
+    flight_no: 'UQ2594',
+    departure_time: '18:25',
+    arrival_time: '01:00+1',
+    signature: 'UQ2594|18:25|01:00+1',
+  });
+
+  assert.equal(returns.length, 1);
+  assert.equal(returns[0].flight_no, 'GS7519');
+  assert.equal(returns[0].price.total_price, 3438);
 });
 
 test('accepts only an explicitly labelled round-trip total', () => {
