@@ -800,5 +800,44 @@
         "message": "browserType.connectOverCDP: connect ECONNREFUSED 127.0.0.1:52389\nCall log:\n  - <ws preparing> retrieving websocket url from http://127.0.0.1:52389\n"
       }
     ]
+  },
+  {
+    "schema_version": 2,
+    "collection_scope": "full_itinerary",
+    "status": "failed",
+    "checked_at": "2026-08-27T10:30:04.326+08:00",
+    "queries": [
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-09-30",
+        "return_date": "2026-10-08"
+      },
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-10-01",
+        "return_date": "2026-10-08"
+      }
+    ],
+    "scans": [
+      {
+        "date": "2026-09-30",
+        "status": "failed"
+      },
+      {
+        "date": "2026-10-01",
+        "status": "failed"
+      }
+    ],
+    "current": null,
+    "errors": [
+      {
+        "date": null,
+        "stage": "outbound_list",
+        "code": "unexpected",
+        "message": "browserType.connectOverCDP: Protocol error (Browser.setDownloadBehavior): Browser context management is not supported.\nCall log:\n  - <ws preparing> retrieving websocket url from http://127.0.0.1:50878\n  - <ws connecting> ws://127.0.0.1:50878/devtools/browser/f56462e2-565b-4466-b8fb-d26850b68e47\n  - <ws connected> ws://127.0.0.1:50878/devtools/browser/f56462e2-565b-4466-b8fb-d26850b68e47\n  - <ws disconnecting> ws://127.0.0.1:50878/devtools/browser/f56462e2-565b-4466-b8fb-d26850b68e47\n  - <ws disconnected> ws://127.0.0.1:50878/devtools/browser/f56462e2-565b-4466-b8fb-d26850b68e47 code=1000 reason=\n"
+      }
+    ]
   }
 ]
