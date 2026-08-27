@@ -94,6 +94,30 @@ test('sorts direct and connecting itineraries together by total price', () => {
   assert.deepEqual(rankItineraries([direct, connecting]).map((item) => item.total_price), [3500, 3600]);
 });
 
+test('ranks every valid itinerary without truncation', () => {
+  const values = [3700, 3500, 3900, 3400, 3800, 3600, 4000].map(
+    (totalPrice, index) => itinerary({
+      total_price: totalPrice,
+      price_text: `往返总价 ¥${totalPrice}`,
+      return: leg({
+        date: '2026-10-08',
+        flight_no: `R${index}100`,
+        departure_time: '08:00',
+        departure_airport: '乌鲁木齐天山国际机场',
+        arrival_time: '13:00',
+        arrival_airport: '杭州萧山国际机场',
+      }),
+    }),
+  );
+
+  const ranked = rankItineraries(values);
+
+  assert.deepEqual(ranked.map((item) => item.total_price), [
+    3400, 3500, 3600, 3700, 3800, 3900, 4000,
+  ]);
+  assert.deepEqual(ranked.map((item) => item.rank), [1, 2, 3, 4, 5, 6, 7]);
+});
+
 test('breaks equal-price ties by outbound target time and then earlier return arrival', () => {
   const laterReturn = itinerary({ return: leg({
     date: '2026-10-08',
