@@ -215,6 +215,38 @@ test('logs date, candidate progress, accepted returns and elapsed time', async (
   assert.equal(logs.some((line) => line.includes('日期完成')), true);
 });
 
+test('counts only complete return combinations in progress logs', async () => {
+  const logs = [];
+  const incompleteReturn = {
+    ...returnCard(3600),
+    flight_no: null,
+  };
+
+  const result = await collectItineraries({
+    queries: [queries[1]],
+    session: {
+      async listOutbounds() {
+        return [outbound('2026-10-01', 'AB1235', '18:00')];
+      },
+      async listReturns() {
+        return [returnCard(), incompleteReturn];
+      },
+    },
+    timeoutMs: 1000,
+    logger: (line) => logs.push(line),
+  });
+
+  assert.equal(result.itineraries.length, 1);
+  assert.equal(
+    logs.some((line) => line.includes('有效返程 1，累计组合 1')),
+    true,
+  );
+  assert.equal(
+    logs.some((line) => line.includes('整轮完成') && line.includes('累计组合 1')),
+    true,
+  );
+});
+
 test('creates one page for the whole collection', async () => {
   let pageCount = 0;
   const page = {};
