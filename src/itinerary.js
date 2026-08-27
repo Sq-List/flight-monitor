@@ -94,16 +94,24 @@ function preferredDistance(item) {
   return outboundPreferredDistance(item.outbound);
 }
 
-// 去程页只深入检查起价最低的五个合格候选，避免遍历全部返程组合。
-export function selectOutboundCandidates(values, limit = 5) {
-  return values
-    .filter(isEligibleOutbound)
-    .sort((left, right) => outboundArrivalPriority(left) - outboundArrivalPriority(right)
-      || (left.price?.total_price ?? Number.POSITIVE_INFINITY)
+function compareOutboundCandidates(left, right) {
+  return outboundArrivalPriority(left) - outboundArrivalPriority(right)
+    || (left.price?.total_price ?? Number.POSITIVE_INFINITY)
       - (right.price?.total_price ?? Number.POSITIVE_INFINITY)
-      || outboundPreferredDistance(left) - outboundPreferredDistance(right)
-      || left.flight_no.localeCompare(right.flight_no))
-    .slice(0, limit);
+    || outboundPreferredDistance(left) - outboundPreferredDistance(right)
+    || left.flight_no.localeCompare(right.flight_no);
+}
+
+// 去程页分别深入检查最多五个直飞和五个中转候选，兼顾两种出行方式。
+export function selectOutboundCandidates(values, limitPerType = 5) {
+  const sorted = values
+    .filter(isEligibleOutbound)
+    .sort(compareOutboundCandidates);
+  return [true, false]
+    .flatMap((direct) => sorted
+      .filter((item) => item.direct === direct)
+      .slice(0, limitPerType))
+    .sort(compareOutboundCandidates);
 }
 
 // 直飞和中转统一按总价排序；同价时再比较去程匹配度和返程到达时间。
