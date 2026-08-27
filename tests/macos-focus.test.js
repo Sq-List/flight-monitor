@@ -51,16 +51,23 @@ test('reuses a dedicated Chromium profile and its default context', async () => 
     browserType,
     platform: 'darwin',
     profileDir: '/Users/test/Library/Application Support/flight-monitor/chromium-profile',
-    makeTempDir: async () => '/tmp/temporary-flight-monitor-profile',
     ensureProfileDir: async (directory) => events.push(['ensure', directory]),
     waitForPort: async () => 9333,
-    run: async (file, args) => events.push(['run', file, args]),
-    removeDir: async (directory) => events.push(['remove', directory]),
+    run: async (file, args) => {
+      events.push(['run', file, args]);
+      if (file === '/usr/bin/pgrep') {
+        throw Object.assign(new Error('no matching process'), { code: 1 });
+      }
+    },
+    remove: async (file, options) => events.push(['remove', file, options]),
+    sleep: async () => events.push(['sleep']),
   });
   const page = await browser.newPage({ locale: 'zh-CN' });
   await browser.close();
 
-  const launch = events.find((event) => event[0] === 'run');
+  const launch = events.find(
+    (event) => event[0] === 'run' && event[1] === 'open',
+  );
   assert.equal(launch[1], 'open');
   assert.deepEqual(launch[2].slice(0, 5), [
     '-g',
@@ -78,6 +85,13 @@ test('reuses a dedicated Chromium profile and its default context', async () => 
     'ensure',
     '/Users/test/Library/Application Support/flight-monitor/chromium-profile',
   ]);
+  const openIndex = events.findIndex(
+    (event) => event[0] === 'run' && event[1] === 'open',
+  );
+  const firstPkillIndex = events.findIndex(
+    (event) => event[0] === 'run' && event[1] === '/usr/bin/pkill',
+  );
+  assert.equal(firstPkillIndex < openIndex, true);
   assert.deepEqual(events.find((event) => event[0] === 'connect'), [
     'connect',
     'http://127.0.0.1:9333',
@@ -88,7 +102,55 @@ test('reuses a dedicated Chromium profile and its default context', async () => 
     events.find((event) => event[0] === 'send'),
     ['send', 'Browser.close'],
   );
-  assert.equal(events.some((event) => event[0] === 'remove'), false);
+  assert.equal(
+    events.filter((event) => event[0] === 'run' && event[1] === '/usr/bin/pkill').length,
+    2,
+  );
+  assert.equal(
+    events.filter((event) => event[0] === 'run' && event[1] === '/usr/bin/pgrep').length,
+    2,
+  );
+  assert.equal(events.filter((event) => event[0] === 'remove').length, 2);
+});
+
+test('cleans the dedicated Chromium profile when CDP connection fails', async () => {
+  const events = [];
+  const expected = Object.assign(new Error('connect refused'), {
+    code: 'ECONNREFUSED',
+  });
+  const profileDir = '/Users/test/Library/Application Support/flight-monitor/chromium-profile';
+
+  await assert.rejects(
+    launchVisibleChromiumInBackground({
+      browserType: {
+        executablePath() {
+          return '/cache/Chromium.app/Contents/MacOS/Chromium';
+        },
+        async connectOverCDP() {
+          throw expected;
+        },
+      },
+      platform: 'darwin',
+      profileDir,
+      ensureProfileDir: async () => {},
+      waitForPort: async () => 9333,
+      run: async (file, args) => {
+        events.push(['run', file, args]);
+        if (file === '/usr/bin/pgrep') {
+          throw Object.assign(new Error('no matching process'), { code: 1 });
+        }
+      },
+      remove: async (file, options) => events.push(['remove', file, options]),
+      sleep: async () => {},
+    }),
+    expected,
+  );
+
+  assert.equal(
+    events.filter((event) => event[0] === 'run' && event[1] === '/usr/bin/pkill').length,
+    2,
+  );
+  assert.equal(events.filter((event) => event[0] === 'remove').length, 2);
 });
 
 test('uses regular visible Playwright launch outside macOS', async () => {

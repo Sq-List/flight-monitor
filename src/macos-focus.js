@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { mkdir, readFile } from 'node:fs/promises';
+import { mkdir, readFile, rm } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -15,6 +15,45 @@ function applicationBundle(executablePath) {
     throw new Error(`无法从 Chromium 可执行文件定位 macOS 应用：${executablePath}`);
   }
   return match[1];
+}
+
+async function waitForDedicatedChromiumExit(profileDir, {
+  run,
+  sleep,
+  attempts = 50,
+}) {
+  const processPattern = `--user-data-dir=${profileDir}`;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      await run('/usr/bin/pgrep', ['-f', '--', processPattern]);
+    } catch (error) {
+      if (error?.code === 1) return;
+      throw error;
+    }
+    await sleep(100);
+  }
+  throw new Error('采集器专用 Chromium 未在 5 秒内退出');
+}
+
+// 只结束采集器专用配置对应的 Chromium，避免残留进程和旧端口污染下一轮。
+async function cleanupDedicatedChromium(profileDir, {
+  run,
+  remove,
+  sleep,
+}) {
+  const processPattern = `--user-data-dir=${profileDir}`;
+  try {
+    await run('/usr/bin/pkill', [
+      '-f',
+      '--',
+      processPattern,
+    ]);
+  } catch (error) {
+    // pkill 退出码 1 表示没有匹配进程，是正常的空闲状态。
+    if (error?.code !== 1) throw error;
+  }
+  await waitForDedicatedChromiumExit(profileDir, { run, sleep });
+  await remove(path.join(profileDir, 'DevToolsActivePort'), { force: true });
 }
 
 // 等待 Chromium 在独立用户目录中写出随机调试端口。
@@ -49,42 +88,60 @@ export async function launchVisibleChromiumInBackground({
   ),
   ensureProfileDir = (directory) => mkdir(directory, { recursive: true }),
   waitForPort = waitForDevToolsPort,
+  remove = (file, options) => rm(file, options),
+  sleep = delay,
 } = {}) {
   if (platform !== 'darwin') return browserType.launch({ headless: false });
 
   await ensureProfileDir(profileDir);
+  const cleanupProfile = () => cleanupDedicatedChromium(profileDir, {
+    run,
+    remove,
+    sleep,
+  });
+  await cleanupProfile();
   const appBundle = applicationBundle(browserType.executablePath());
-  await run('open', [
-    '-g',
-    '-n',
-    '-a',
-    appBundle,
-    '--args',
-    '--remote-debugging-port=0',
-    `--user-data-dir=${profileDir}`,
-    '--no-first-run',
-    '--no-default-browser-check',
-    '--lang=zh-CN',
-    'about:blank',
-  ]);
-  const port = await waitForPort(profileDir);
-  const connectedBrowser = await browserType.connectOverCDP(
-    `http://127.0.0.1:${port}`,
-  );
-  const context = connectedBrowser.contexts()[0];
-  if (!context) {
-    await connectedBrowser.close().catch(() => {});
-    throw new Error('后台 Chromium 未提供持久浏览器上下文');
-  }
+  let connectedBrowser;
+  try {
+    await run('open', [
+      '-g',
+      '-n',
+      '-a',
+      appBundle,
+      '--args',
+      '--remote-debugging-port=0',
+      `--user-data-dir=${profileDir}`,
+      '--no-first-run',
+      '--no-default-browser-check',
+      '--lang=zh-CN',
+      'about:blank',
+    ]);
+    const port = await waitForPort(profileDir);
+    connectedBrowser = await browserType.connectOverCDP(
+      `http://127.0.0.1:${port}`,
+    );
+    const context = connectedBrowser.contexts()[0];
+    if (!context) {
+      throw new Error('后台 Chromium 未提供持久浏览器上下文');
+    }
 
-  return {
-    async newPage() {
-      return context.newPage();
-    },
-    async close() {
-      const cdpSession = await connectedBrowser.newBrowserCDPSession();
-      await cdpSession.send('Browser.close');
-      await connectedBrowser.close().catch(() => {});
-    },
-  };
+    return {
+      async newPage() {
+        return context.newPage();
+      },
+      async close() {
+        try {
+          const cdpSession = await connectedBrowser.newBrowserCDPSession();
+          await cdpSession.send('Browser.close');
+        } finally {
+          await connectedBrowser.close().catch(() => {});
+          await cleanupProfile();
+        }
+      },
+    };
+  } catch (error) {
+    await connectedBrowser?.close().catch(() => {});
+    await cleanupProfile().catch(() => {});
+    throw error;
+  }
 }
