@@ -7,10 +7,28 @@ import {
 
 test('reuses a dedicated Chromium profile and its default context', async () => {
   const events = [];
+  const pages = ['old-1', 'old-2'].map((id) => ({
+    id,
+    async close() {
+      events.push(['restored-close', id]);
+      pages.splice(pages.findIndex((page) => page.id === id), 1);
+    },
+  }));
   const persistentContext = {
+    pages() {
+      return [...pages];
+    },
     async newPage() {
       events.push(['persistent-page']);
-      return { id: 'persistent-page' };
+      const page = {
+        id: 'persistent-page',
+        async close() {
+          events.push(['collection-close']);
+          pages.splice(pages.indexOf(page), 1);
+        },
+      };
+      pages.push(page);
+      return page;
     },
   };
   const connectedBrowser = {
@@ -96,21 +114,84 @@ test('reuses a dedicated Chromium profile and its default context', async () => 
     'connect',
     'http://127.0.0.1:9333',
   ]);
-  assert.deepEqual(page, { id: 'persistent-page' });
+  assert.equal(page.id, 'persistent-page');
   assert.equal(events.some((event) => event[0] === 'context'), false);
+  assert.deepEqual(
+    events.filter((event) => event[0] === 'restored-close'),
+    [['restored-close', 'old-1'], ['restored-close', 'old-2']],
+  );
+  assert.equal(events.filter((event) => event[0] === 'collection-close').length, 1);
   assert.deepEqual(
     events.find((event) => event[0] === 'send'),
     ['send', 'Browser.close'],
   );
   assert.equal(
     events.filter((event) => event[0] === 'run' && event[1] === '/usr/bin/pkill').length,
-    2,
+    1,
   );
   assert.equal(
     events.filter((event) => event[0] === 'run' && event[1] === '/usr/bin/pgrep').length,
     2,
   );
   assert.equal(events.filter((event) => event[0] === 'remove').length, 2);
+});
+
+test('waits for a slow graceful Chromium exit before forcing cleanup', async () => {
+  const events = [];
+  let closing = false;
+  let closePolls = 0;
+  const connectedBrowser = {
+    async newBrowserCDPSession() {
+      return {
+        async send(method) {
+          events.push(['send', method]);
+          closing = true;
+        },
+      };
+    },
+    contexts() {
+      return [{ pages: () => [], async newPage() {} }];
+    },
+    async close() {
+      events.push(['browser-close']);
+    },
+  };
+
+  const browser = await launchVisibleChromiumInBackground({
+    browserType: {
+      executablePath() {
+        return '/cache/Chromium.app/Contents/MacOS/Chromium';
+      },
+      async connectOverCDP() {
+        return connectedBrowser;
+      },
+    },
+    platform: 'darwin',
+    profileDir: '/Users/test/Library/Application Support/flight-monitor/chromium-profile',
+    ensureProfileDir: async () => {},
+    waitForPort: async () => 9333,
+    run: async (file, args) => {
+      events.push(['run', file, args]);
+      if (file !== '/usr/bin/pgrep') return;
+      if (!closing) {
+        throw Object.assign(new Error('no matching process'), { code: 1 });
+      }
+      closePolls += 1;
+      if (closePolls >= 3) {
+        throw Object.assign(new Error('no matching process'), { code: 1 });
+      }
+    },
+    remove: async (file, options) => events.push(['remove', file, options]),
+    sleep: async () => events.push(['sleep']),
+  });
+
+  await browser.close();
+
+  assert.equal(closePolls, 3);
+  assert.equal(
+    events.filter((event) => event[0] === 'run' && event[1] === '/usr/bin/pkill').length,
+    1,
+  );
 });
 
 test('cleans the dedicated Chromium profile when CDP connection fails', async () => {
