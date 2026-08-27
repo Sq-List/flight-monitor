@@ -1,7 +1,7 @@
 #!/bin/zsh
 set -u
 
-repo_dir="${FLIGHT_MONITOR_REPO_DIR:-/Users/sqlist/Library/Application Support/flight-monitor/repo}"
+repo_dir="${FLIGHT_MONITOR_REPO_DIR:-/Users/sqlist/Project/other/flight-monitor}"
 git_proxy="${FLIGHT_MONITOR_GIT_PROXY:-http://127.0.0.1:7890}"
 export PATH="/Users/sqlist/.nvm/versions/node/v25.5.0/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
 

@@ -7,10 +7,10 @@
   <key>ProgramArguments</key>
   <array>
     <string>/bin/zsh</string>
-    <string>/Users/sqlist/Library/Application Support/flight-monitor/repo/scripts/run-macos.sh</string>
+    <string>/Users/sqlist/Project/other/flight-monitor/scripts/run-macos.sh</string>
   </array>
   <key>WorkingDirectory</key>
-  <string>/Users/sqlist/Library/Application Support/flight-monitor/repo</string>
+  <string>/Users/sqlist/Project/other/flight-monitor</string>
   <key>RunAtLoad</key>
   <true/>
   <key>StartCalendarInterval</key>
