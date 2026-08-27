@@ -55,6 +55,12 @@ const legacyHistory = [{
 }];
 
 test('writes a full two-date success and preserves legacy history unchanged', () => {
+  const allItineraries = Array.from({ length: 7 }, (_, index) => ({
+    ...complete,
+    rank: index + 1,
+    total_price: 3500 + index,
+    price_text: `往返含税 ¥${3500 + index}`,
+  }));
   const next = buildNextState({
     previousLatest: { schema_version: 1, last_success: { best_price: 3538 } },
     history: legacyHistory,
@@ -65,7 +71,7 @@ test('writes a full two-date success and preserves legacy history unchanged', ()
         date: query.depart_date,
         status: 'completed',
       })),
-      itineraries: [complete],
+      itineraries: allItineraries,
       errors: [],
     },
   });
@@ -74,8 +80,11 @@ test('writes a full two-date success and preserves legacy history unchanged', ()
   assert.equal(next.latest.status, 'success');
   assert.equal(next.latest.current.best_total_price, 3500);
   assert.equal(next.latest.last_success.best_total_price, 3500);
+  assert.equal(next.latest.current.itineraries.length, 7);
+  assert.equal(next.latest.last_success.itineraries.length, 7);
   assert.deepEqual(next.history[0], legacyHistory[0]);
   assert.equal(next.history[1].collection_scope, 'full_itinerary');
+  assert.equal(next.history[1].current.itineraries.length, 7);
 });
 
 test('records success with availability none without replacing last success', () => {

@@ -115,7 +115,7 @@ export function selectOutboundCandidates(values, limitPerType = 5) {
 }
 
 // 直飞和中转统一按总价排序；同价时再比较去程匹配度和返程到达时间。
-export function rankItineraries(values, limit = 5) {
+export function rankItineraries(values) {
   return values
     .filter(validateCompleteItinerary)
     .sort((left, right) => left.total_price - right.total_price
@@ -123,6 +123,5 @@ export function rankItineraries(values, limit = 5) {
       || clockMinutes(left.return.arrival_time) - clockMinutes(right.return.arrival_time)
       || left.outbound.flight_no.localeCompare(right.outbound.flight_no)
       || left.return.flight_no.localeCompare(right.return.flight_no))
-    .slice(0, limit)
     .map((item, index) => ({ rank: index + 1, ...item }));
 }
