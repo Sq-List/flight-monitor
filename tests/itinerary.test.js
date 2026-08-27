@@ -131,6 +131,38 @@ test('selects at most five eligible outbounds by starting price', () => {
   );
 });
 
+test('selects five direct and five connecting outbounds', () => {
+  const direct = [3700, 3500, 3900, 3400, 3800, 3600, 4000].map(
+    (price, index) => leg({
+      flight_no: `D${index}100`,
+      direct: true,
+      stops: [],
+      price: { total_price: price },
+    }),
+  );
+  const connecting = [4100, 3300, 3700, 3500, 3900, 3400, 3600].map(
+    (price, index) => leg({
+      flight_no: `C${index}100`,
+      direct: false,
+      stops: [{ airport: '中转机场', wait_minutes: 45 }],
+      price: { total_price: price },
+    }),
+  );
+
+  const selected = selectOutboundCandidates([...direct, ...connecting]);
+
+  assert.equal(selected.filter((item) => item.direct).length, 5);
+  assert.equal(selected.filter((item) => !item.direct).length, 5);
+  assert.deepEqual(
+    selected.filter((item) => item.direct).map((item) => item.price.total_price),
+    [3400, 3500, 3600, 3700, 3800],
+  );
+  assert.deepEqual(
+    selected.filter((item) => !item.direct).map((item) => item.price.total_price),
+    [3300, 3400, 3500, 3600, 3700],
+  );
+});
+
 test('prioritizes October 1 arrivals by next-day 01:00 and fills remaining slots', () => {
   const values = [
     leg({ flight_no: 'EARLY1', arrival_time: '00:20+1', price: { total_price: 3900 } }),
