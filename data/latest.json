@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "collection_scope": "full_itinerary",
-  "status": "failed",
-  "checked_at": "2026-08-28T14:38:09.620+08:00",
+  "status": "partial",
+  "checked_at": "2026-08-28T18:38:14.929+08:00",
   "queries": [
     {
       "from": "HGH",
@@ -20,26 +20,25 @@
   "scans": [
     {
       "date": "2026-09-30",
-      "status": "failed"
+      "status": "completed"
     },
     {
       "date": "2026-10-01",
       "status": "failed"
     }
   ],
-  "current": null,
+  "current": {
+    "availability": "none",
+    "best_total_price": null,
+    "currency": "CNY",
+    "itineraries": []
+  },
   "errors": [
-    {
-      "date": "2026-09-30",
-      "stage": "outbound_list",
-      "code": "unexpected",
-      "message": "page.goto: net::ERR_INTERNET_DISCONNECTED at https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-09-30_2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0\nCall log:\n  - navigating to \"https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-09-30_2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0\", waiting until \"domcontentloaded\"\n"
-    },
     {
       "date": "2026-10-01",
       "stage": "outbound_list",
       "code": "unexpected",
-      "message": "page.goto: net::ERR_INTERNET_DISCONNECTED at https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-10-01_2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0\nCall log:\n  - navigating to \"https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-10-01_2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0\", waiting until \"domcontentloaded\"\n"
+      "message": "page.waitForTimeout: Target page, context or browser has been closed"
     }
   ],
   "last_success": {
