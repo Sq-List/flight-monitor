@@ -34,10 +34,10 @@ export function isEligibleConnection(leg) {
       && stop.wait_minutes <= 45);
 }
 
-// 去程到达时间不做硬过滤；10 月 1 日的到达软限制只在候选排序中使用。
+// 字段不完整的卡片不参与排序；到达时间仍不做硬过滤。
 export function isEligibleOutbound(leg) {
   const window = OUTBOUND_WINDOWS[leg?.date];
-  if (!window || !isEligibleConnection(leg)) return false;
+  if (!window || !completeLeg(leg) || !isEligibleConnection(leg)) return false;
   const departure = clockMinutes(leg.departure_time);
   const arrival = clockMinutes(leg.arrival_time);
   return Number.isFinite(departure)
