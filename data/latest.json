@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "collection_scope": "full_itinerary",
-  "status": "partial",
-  "checked_at": "2026-09-01T10:30:08.574+08:00",
+  "status": "success",
+  "checked_at": "2026-09-01T12:01:22.280+08:00",
   "queries": [
     {
       "from": "HGH",
@@ -24,25 +24,10 @@
     },
     {
       "date": "2026-10-01",
-      "status": "failed"
+      "status": "completed"
     }
   ],
   "current": {
-    "availability": "none",
-    "best_total_price": null,
-    "currency": "CNY",
-    "itineraries": []
-  },
-  "errors": [
-    {
-      "date": "2026-10-01",
-      "stage": "outbound_list",
-      "code": "unexpected",
-      "message": "Cannot read properties of null (reading 'localeCompare')"
-    }
-  ],
-  "last_success": {
-    "checked_at": "2026-08-31T14:30:08.413+08:00",
     "availability": "available",
     "best_total_price": 3610,
     "currency": "CNY",
@@ -258,25 +243,20 @@
       },
       {
         "rank": 7,
-        "total_price": 3887,
-        "price_text": "¥3887起往返总价",
+        "total_price": 3790,
+        "price_text": "¥3790起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "新海航｜天津航空",
-          "flight_no": "GS7520",
-          "departure_time": "16:05",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:35",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": false,
-          "stops": [
-            {
-              "airport": "金川机场",
-              "wait_minutes": 45
-            }
-          ]
+          "direct": true,
+          "stops": []
         },
         "return": {
           "date": "2026-10-08",
@@ -297,18 +277,29 @@
       },
       {
         "rank": 8,
-        "total_price": 3912,
-        "price_text": "¥3912起往返总价",
+        "total_price": 3790,
+        "price_text": "¥3790起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "新海航｜天津航空",
-          "flight_no": "GS7520",
-          "departure_time": "16:05",
+          "airline": "山东航空",
+          "flight_no": "SC2117",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:35",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7519",
+          "departure_time": "08:15",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "14:50",
+          "arrival_airport": "萧山国际机场T3",
           "direct": false,
           "stops": [
             {
@@ -316,6 +307,92 @@
               "wait_minutes": 45
             }
           ]
+        }
+      },
+      {
+        "rank": 9,
+        "total_price": 3790,
+        "price_text": "¥3790起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "西藏航空",
+          "flight_no": "TV3039",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7519",
+          "departure_time": "08:15",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "14:50",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        }
+      },
+      {
+        "rank": 10,
+        "total_price": 3790,
+        "price_text": "¥3790起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "深圳航空",
+          "flight_no": "ZH2529",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7519",
+          "departure_time": "08:15",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "14:50",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        }
+      },
+      {
+        "rank": 11,
+        "total_price": 3815,
+        "price_text": "¥3815起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
         },
         "return": {
           "date": "2026-10-08",
@@ -330,26 +407,108 @@
         }
       },
       {
-        "rank": 9,
-        "total_price": 3917,
-        "price_text": "¥3917起往返总价",
+        "rank": 12,
+        "total_price": 3815,
+        "price_text": "¥3815起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "新海航｜天津航空",
-          "flight_no": "GS7520",
-          "departure_time": "16:05",
+          "airline": "山东航空",
+          "flight_no": "SC2117",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:35",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": false,
-          "stops": [
-            {
-              "airport": "金川机场",
-              "wait_minutes": 45
-            }
-          ]
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "长龙航空",
+          "flight_no": "GJ8968",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 13,
+        "total_price": 3815,
+        "price_text": "¥3815起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "西藏航空",
+          "flight_no": "TV3039",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "长龙航空",
+          "flight_no": "GJ8968",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 14,
+        "total_price": 3815,
+        "price_text": "¥3815起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "深圳航空",
+          "flight_no": "ZH2529",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "长龙航空",
+          "flight_no": "GJ8968",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 15,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
         },
         "return": {
           "date": "2026-10-08",
@@ -364,26 +523,21 @@
         }
       },
       {
-        "rank": 10,
-        "total_price": 3917,
-        "price_text": "¥3917起往返总价",
+        "rank": 16,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "新海航｜天津航空",
-          "flight_no": "GS7520",
-          "departure_time": "16:05",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:35",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": false,
-          "stops": [
-            {
-              "airport": "金川机场",
-              "wait_minutes": 45
-            }
-          ]
+          "direct": true,
+          "stops": []
         },
         "return": {
           "date": "2026-10-08",
@@ -398,26 +552,21 @@
         }
       },
       {
-        "rank": 11,
-        "total_price": 3917,
-        "price_text": "¥3917起往返总价",
+        "rank": 17,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "新海航｜天津航空",
-          "flight_no": "GS7520",
-          "departure_time": "16:05",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:35",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": false,
-          "stops": [
-            {
-              "airport": "金川机场",
-              "wait_minutes": 45
-            }
-          ]
+          "direct": true,
+          "stops": []
         },
         "return": {
           "date": "2026-10-08",
@@ -432,230 +581,26 @@
         }
       },
       {
-        "rank": 12,
-        "total_price": 3925,
-        "price_text": "¥3925起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "长龙航空",
-          "flight_no": "GJ8967",
-          "departure_time": "18:00",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "新海航｜天津航空",
-          "flight_no": "GS7519",
-          "departure_time": "08:15",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "14:50",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": false,
-          "stops": [
-            {
-              "airport": "金川机场",
-              "wait_minutes": 45
-            }
-          ]
-        }
-      },
-      {
-        "rank": 13,
-        "total_price": 3927,
-        "price_text": "¥3927起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "新海航｜天津航空",
-          "flight_no": "GS7520",
-          "departure_time": "16:05",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:35",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": false,
-          "stops": [
-            {
-              "airport": "金川机场",
-              "wait_minutes": 45
-            }
-          ]
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "厦门航空",
-          "flight_no": "MF5371",
-          "departure_time": "07:40",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "13:00",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": true,
-          "stops": []
-        }
-      },
-      {
-        "rank": 14,
-        "total_price": 3930,
-        "price_text": "¥3930起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "四川航空",
-          "flight_no": "3U4941",
-          "departure_time": "18:00",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "新海航｜天津航空",
-          "flight_no": "GS7519",
-          "departure_time": "08:15",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "14:50",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": false,
-          "stops": [
-            {
-              "airport": "金川机场",
-              "wait_minutes": 45
-            }
-          ]
-        }
-      },
-      {
-        "rank": 15,
-        "total_price": 3930,
-        "price_text": "¥3930起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "华夏航空",
-          "flight_no": "G59575",
-          "departure_time": "18:00",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "新海航｜天津航空",
-          "flight_no": "GS7519",
-          "departure_time": "08:15",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "14:50",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": false,
-          "stops": [
-            {
-              "airport": "金川机场",
-              "wait_minutes": 45
-            }
-          ]
-        }
-      },
-      {
-        "rank": 16,
-        "total_price": 3930,
-        "price_text": "¥3930起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "西藏航空",
-          "flight_no": "TV2531",
-          "departure_time": "18:00",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "新海航｜天津航空",
-          "flight_no": "GS7519",
-          "departure_time": "08:15",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "14:50",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": false,
-          "stops": [
-            {
-              "airport": "金川机场",
-              "wait_minutes": 45
-            }
-          ]
-        }
-      },
-      {
-        "rank": 17,
-        "total_price": 3940,
-        "price_text": "¥3940起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "厦门航空",
-          "flight_no": "MF5370",
-          "departure_time": "18:00",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "新海航｜天津航空",
-          "flight_no": "GS7519",
-          "departure_time": "08:15",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "14:50",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": false,
-          "stops": [
-            {
-              "airport": "金川机场",
-              "wait_minutes": 45
-            }
-          ]
-        }
-      },
-      {
         "rank": 18,
-        "total_price": 3950,
-        "price_text": "¥3950起往返总价",
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "长龙航空",
-          "flight_no": "GJ8967",
-          "departure_time": "18:00",
+          "airline": "山东航空",
+          "flight_no": "SC2117",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
         },
         "return": {
           "date": "2026-10-08",
-          "airline": "长龙航空",
-          "flight_no": "GJ8968",
+          "airline": "四川航空",
+          "flight_no": "3U4942",
           "departure_time": "07:40",
           "departure_airport": "乌鲁木齐天山国际机场",
           "arrival_time": "13:00",
@@ -666,25 +611,25 @@
       },
       {
         "rank": 19,
-        "total_price": 3955,
-        "price_text": "¥3955起往返总价",
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "四川航空",
-          "flight_no": "3U4941",
-          "departure_time": "18:00",
+          "airline": "山东航空",
+          "flight_no": "SC2117",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
         },
         "return": {
           "date": "2026-10-08",
-          "airline": "长龙航空",
-          "flight_no": "GJ8968",
+          "airline": "华夏航空",
+          "flight_no": "G59576",
           "departure_time": "07:40",
           "departure_airport": "乌鲁木齐天山国际机场",
           "arrival_time": "13:00",
@@ -695,25 +640,25 @@
       },
       {
         "rank": 20,
-        "total_price": 3955,
-        "price_text": "¥3955起往返总价",
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "华夏航空",
-          "flight_no": "G59575",
-          "departure_time": "18:00",
+          "airline": "山东航空",
+          "flight_no": "SC2117",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
         },
         "return": {
           "date": "2026-10-08",
-          "airline": "长龙航空",
-          "flight_no": "GJ8968",
+          "airline": "西藏航空",
+          "flight_no": "TV2532",
           "departure_time": "07:40",
           "departure_airport": "乌鲁木齐天山国际机场",
           "arrival_time": "13:00",
@@ -724,17 +669,17 @@
       },
       {
         "rank": 21,
-        "total_price": 3955,
-        "price_text": "¥3955起往返总价",
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "长龙航空",
-          "flight_no": "GJ8967",
-          "departure_time": "18:00",
+          "airline": "西藏航空",
+          "flight_no": "TV3039",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
@@ -753,17 +698,17 @@
       },
       {
         "rank": 22,
-        "total_price": 3955,
-        "price_text": "¥3955起往返总价",
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "长龙航空",
-          "flight_no": "GJ8967",
-          "departure_time": "18:00",
+          "airline": "西藏航空",
+          "flight_no": "TV3039",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
@@ -782,17 +727,17 @@
       },
       {
         "rank": 23,
-        "total_price": 3955,
-        "price_text": "¥3955起往返总价",
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "长龙航空",
-          "flight_no": "GJ8967",
-          "departure_time": "18:00",
+          "airline": "西藏航空",
+          "flight_no": "TV3039",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
@@ -811,25 +756,25 @@
       },
       {
         "rank": 24,
-        "total_price": 3955,
-        "price_text": "¥3955起往返总价",
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "西藏航空",
-          "flight_no": "TV2531",
-          "departure_time": "18:00",
+          "airline": "深圳航空",
+          "flight_no": "ZH2529",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
         },
         "return": {
           "date": "2026-10-08",
-          "airline": "长龙航空",
-          "flight_no": "GJ8968",
+          "airline": "四川航空",
+          "flight_no": "3U4942",
           "departure_time": "07:40",
           "departure_airport": "乌鲁木齐天山国际机场",
           "arrival_time": "13:00",
@@ -840,25 +785,25 @@
       },
       {
         "rank": 25,
-        "total_price": 3960,
-        "price_text": "¥3960起往返总价",
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "四川航空",
-          "flight_no": "3U4941",
-          "departure_time": "18:00",
+          "airline": "深圳航空",
+          "flight_no": "ZH2529",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
         },
         "return": {
           "date": "2026-10-08",
-          "airline": "四川航空",
-          "flight_no": "3U4942",
+          "airline": "华夏航空",
+          "flight_no": "G59576",
           "departure_time": "07:40",
           "departure_airport": "乌鲁木齐天山国际机场",
           "arrival_time": "13:00",
@@ -869,25 +814,25 @@
       },
       {
         "rank": 26,
-        "total_price": 3960,
-        "price_text": "¥3960起往返总价",
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "四川航空",
-          "flight_no": "3U4941",
-          "departure_time": "18:00",
+          "airline": "深圳航空",
+          "flight_no": "ZH2529",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
         },
         "return": {
           "date": "2026-10-08",
-          "airline": "华夏航空",
-          "flight_no": "G59576",
+          "airline": "西藏航空",
+          "flight_no": "TV2532",
           "departure_time": "07:40",
           "departure_airport": "乌鲁木齐天山国际机场",
           "arrival_time": "13:00",
@@ -898,220 +843,17 @@
       },
       {
         "rank": 27,
-        "total_price": 3960,
-        "price_text": "¥3960起往返总价",
+        "total_price": 3830,
+        "price_text": "¥3830起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "四川航空",
-          "flight_no": "3U4941",
-          "departure_time": "18:00",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "西藏航空",
-          "flight_no": "TV2532",
-          "departure_time": "07:40",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "13:00",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": true,
-          "stops": []
-        }
-      },
-      {
-        "rank": 28,
-        "total_price": 3960,
-        "price_text": "¥3960起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "华夏航空",
-          "flight_no": "G59575",
-          "departure_time": "18:00",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "四川航空",
-          "flight_no": "3U4942",
-          "departure_time": "07:40",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "13:00",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": true,
-          "stops": []
-        }
-      },
-      {
-        "rank": 29,
-        "total_price": 3960,
-        "price_text": "¥3960起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "华夏航空",
-          "flight_no": "G59575",
-          "departure_time": "18:00",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "华夏航空",
-          "flight_no": "G59576",
-          "departure_time": "07:40",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "13:00",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": true,
-          "stops": []
-        }
-      },
-      {
-        "rank": 30,
-        "total_price": 3960,
-        "price_text": "¥3960起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "华夏航空",
-          "flight_no": "G59575",
-          "departure_time": "18:00",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "西藏航空",
-          "flight_no": "TV2532",
-          "departure_time": "07:40",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "13:00",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": true,
-          "stops": []
-        }
-      },
-      {
-        "rank": 31,
-        "total_price": 3960,
-        "price_text": "¥3960起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "西藏航空",
-          "flight_no": "TV2531",
-          "departure_time": "18:00",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "四川航空",
-          "flight_no": "3U4942",
-          "departure_time": "07:40",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "13:00",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": true,
-          "stops": []
-        }
-      },
-      {
-        "rank": 32,
-        "total_price": 3960,
-        "price_text": "¥3960起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "西藏航空",
-          "flight_no": "TV2531",
-          "departure_time": "18:00",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "华夏航空",
-          "flight_no": "G59576",
-          "departure_time": "07:40",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "13:00",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": true,
-          "stops": []
-        }
-      },
-      {
-        "rank": 33,
-        "total_price": 3960,
-        "price_text": "¥3960起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "西藏航空",
-          "flight_no": "TV2531",
-          "departure_time": "18:00",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "西藏航空",
-          "flight_no": "TV2532",
-          "departure_time": "07:40",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "13:00",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": true,
-          "stops": []
-        }
-      },
-      {
-        "rank": 34,
-        "total_price": 3965,
-        "price_text": "¥3965起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "长龙航空",
-          "flight_no": "GJ8967",
-          "departure_time": "18:00",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
@@ -1129,18 +871,697 @@
         }
       },
       {
-        "rank": 35,
-        "total_price": 3965,
-        "price_text": "¥3965起往返总价",
+        "rank": 28,
+        "total_price": 3830,
+        "price_text": "¥3830起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "厦门航空",
-          "flight_no": "MF5370",
-          "departure_time": "18:00",
+          "airline": "山东航空",
+          "flight_no": "SC2117",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "厦门航空",
+          "flight_no": "MF5371",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 29,
+        "total_price": 3830,
+        "price_text": "¥3830起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "西藏航空",
+          "flight_no": "TV3039",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "厦门航空",
+          "flight_no": "MF5371",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 30,
+        "total_price": 3830,
+        "price_text": "¥3830起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "深圳航空",
+          "flight_no": "ZH2529",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "厦门航空",
+          "flight_no": "MF5371",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 31,
+        "total_price": 3900,
+        "price_text": "¥3900起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "成都航空",
+          "flight_no": "EU9232",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 32,
+        "total_price": 3910,
+        "price_text": "¥3910起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7520",
+          "departure_time": "16:05",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:35",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7519",
+          "departure_time": "08:15",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "14:50",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        }
+      },
+      {
+        "rank": 33,
+        "total_price": 3935,
+        "price_text": "¥3935起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7520",
+          "departure_time": "16:05",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:35",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "长龙航空",
+          "flight_no": "GJ8968",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 34,
+        "total_price": 3940,
+        "price_text": "¥3940起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7520",
+          "departure_time": "16:05",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:35",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "四川航空",
+          "flight_no": "3U4942",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 35,
+        "total_price": 3940,
+        "price_text": "¥3940起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7520",
+          "departure_time": "16:05",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:35",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "华夏航空",
+          "flight_no": "G59576",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 36,
+        "total_price": 3940,
+        "price_text": "¥3940起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7520",
+          "departure_time": "16:05",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:35",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "西藏航空",
+          "flight_no": "TV2532",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 37,
+        "total_price": 3950,
+        "price_text": "¥3950起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7520",
+          "departure_time": "16:05",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:35",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "厦门航空",
+          "flight_no": "MF5371",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      }
+    ]
+  },
+  "errors": [],
+  "last_success": {
+    "checked_at": "2026-09-01T12:01:22.280+08:00",
+    "availability": "available",
+    "best_total_price": 3610,
+    "currency": "CNY",
+    "itineraries": [
+      {
+        "rank": 1,
+        "total_price": 3610,
+        "price_text": "¥3610起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜乌鲁木齐航空",
+          "flight_no": "UQ2594",
+          "departure_time": "18:25",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "01:00+1",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "成县机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7519",
+          "departure_time": "08:15",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "14:50",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        }
+      },
+      {
+        "rank": 2,
+        "total_price": 3635,
+        "price_text": "¥3635起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜乌鲁木齐航空",
+          "flight_no": "UQ2594",
+          "departure_time": "18:25",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "01:00+1",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "成县机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "长龙航空",
+          "flight_no": "GJ8968",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 3,
+        "total_price": 3640,
+        "price_text": "¥3640起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜乌鲁木齐航空",
+          "flight_no": "UQ2594",
+          "departure_time": "18:25",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "01:00+1",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "成县机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "四川航空",
+          "flight_no": "3U4942",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 4,
+        "total_price": 3640,
+        "price_text": "¥3640起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜乌鲁木齐航空",
+          "flight_no": "UQ2594",
+          "departure_time": "18:25",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "01:00+1",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "成县机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "华夏航空",
+          "flight_no": "G59576",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 5,
+        "total_price": 3640,
+        "price_text": "¥3640起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜乌鲁木齐航空",
+          "flight_no": "UQ2594",
+          "departure_time": "18:25",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "01:00+1",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "成县机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "西藏航空",
+          "flight_no": "TV2532",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 6,
+        "total_price": 3650,
+        "price_text": "¥3650起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜乌鲁木齐航空",
+          "flight_no": "UQ2594",
+          "departure_time": "18:25",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "01:00+1",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "成县机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "厦门航空",
+          "flight_no": "MF5371",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 7,
+        "total_price": 3790,
+        "price_text": "¥3790起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7519",
+          "departure_time": "08:15",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "14:50",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        }
+      },
+      {
+        "rank": 8,
+        "total_price": 3790,
+        "price_text": "¥3790起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "山东航空",
+          "flight_no": "SC2117",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7519",
+          "departure_time": "08:15",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "14:50",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        }
+      },
+      {
+        "rank": 9,
+        "total_price": 3790,
+        "price_text": "¥3790起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "西藏航空",
+          "flight_no": "TV3039",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7519",
+          "departure_time": "08:15",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "14:50",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        }
+      },
+      {
+        "rank": 10,
+        "total_price": 3790,
+        "price_text": "¥3790起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "深圳航空",
+          "flight_no": "ZH2529",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7519",
+          "departure_time": "08:15",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "14:50",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        }
+      },
+      {
+        "rank": 11,
+        "total_price": 3815,
+        "price_text": "¥3815起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
@@ -1158,26 +1579,26 @@
         }
       },
       {
-        "rank": 36,
-        "total_price": 3970,
-        "price_text": "¥3970起往返总价",
+        "rank": 12,
+        "total_price": 3815,
+        "price_text": "¥3815起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "四川航空",
-          "flight_no": "3U4941",
-          "departure_time": "18:00",
+          "airline": "山东航空",
+          "flight_no": "SC2117",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
         },
         "return": {
           "date": "2026-10-08",
-          "airline": "厦门航空",
-          "flight_no": "MF5371",
+          "airline": "长龙航空",
+          "flight_no": "GJ8968",
           "departure_time": "07:40",
           "departure_airport": "乌鲁木齐天山国际机场",
           "arrival_time": "13:00",
@@ -1187,26 +1608,26 @@
         }
       },
       {
-        "rank": 37,
-        "total_price": 3970,
-        "price_text": "¥3970起往返总价",
+        "rank": 13,
+        "total_price": 3815,
+        "price_text": "¥3815起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "华夏航空",
-          "flight_no": "G59575",
-          "departure_time": "18:00",
+          "airline": "西藏航空",
+          "flight_no": "TV3039",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
         },
         "return": {
           "date": "2026-10-08",
-          "airline": "厦门航空",
-          "flight_no": "MF5371",
+          "airline": "长龙航空",
+          "flight_no": "GJ8968",
           "departure_time": "07:40",
           "departure_airport": "乌鲁木齐天山国际机场",
           "arrival_time": "13:00",
@@ -1216,18 +1637,47 @@
         }
       },
       {
-        "rank": 38,
-        "total_price": 3970,
-        "price_text": "¥3970起往返总价",
+        "rank": 14,
+        "total_price": 3815,
+        "price_text": "¥3815起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "厦门航空",
-          "flight_no": "MF5370",
-          "departure_time": "18:00",
+          "airline": "深圳航空",
+          "flight_no": "ZH2529",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "长龙航空",
+          "flight_no": "GJ8968",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 15,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
@@ -1245,18 +1695,18 @@
         }
       },
       {
-        "rank": 39,
-        "total_price": 3970,
-        "price_text": "¥3970起往返总价",
+        "rank": 16,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "厦门航空",
-          "flight_no": "MF5370",
-          "departure_time": "18:00",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
@@ -1274,18 +1724,18 @@
         }
       },
       {
-        "rank": 40,
-        "total_price": 3970,
-        "price_text": "¥3970起往返总价",
+        "rank": 17,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "厦门航空",
-          "flight_no": "MF5370",
-          "departure_time": "18:00",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
@@ -1303,76 +1753,395 @@
         }
       },
       {
-        "rank": 41,
-        "total_price": 3970,
-        "price_text": "¥3970起往返总价",
+        "rank": 18,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "山东航空",
+          "flight_no": "SC2117",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "四川航空",
+          "flight_no": "3U4942",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 19,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "山东航空",
+          "flight_no": "SC2117",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "华夏航空",
+          "flight_no": "G59576",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 20,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "山东航空",
+          "flight_no": "SC2117",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "西藏航空",
+          "flight_no": "TV2532",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 21,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
           "airline": "西藏航空",
-          "flight_no": "TV2531",
-          "departure_time": "18:00",
+          "flight_no": "TV3039",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
         },
         "return": {
           "date": "2026-10-08",
-          "airline": "厦门航空",
-          "flight_no": "MF5371",
-          "departure_time": "07:40",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "13:00",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": true,
-          "stops": []
-        }
-      },
-      {
-        "rank": 42,
-        "total_price": 3980,
-        "price_text": "¥3980起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
-          "airline": "厦门航空",
-          "flight_no": "MF5370",
-          "departure_time": "18:00",
-          "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
-          "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
-        },
-        "return": {
-          "date": "2026-10-08",
-          "airline": "厦门航空",
-          "flight_no": "MF5371",
-          "departure_time": "07:40",
-          "departure_airport": "乌鲁木齐天山国际机场",
-          "arrival_time": "13:00",
-          "arrival_airport": "萧山国际机场T3",
-          "direct": true,
-          "stops": []
-        }
-      },
-      {
-        "rank": 43,
-        "total_price": 4040,
-        "price_text": "¥4040起往返总价",
-        "price_scope": "itinerary_starting_price",
-        "currency": "CNY",
-        "outbound": {
-          "date": "2026-10-01",
           "airline": "四川航空",
-          "flight_no": "3U4941",
-          "departure_time": "18:00",
+          "flight_no": "3U4942",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 22,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "西藏航空",
+          "flight_no": "TV3039",
+          "departure_time": "17:40",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "华夏航空",
+          "flight_no": "G59576",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 23,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "西藏航空",
+          "flight_no": "TV3039",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "西藏航空",
+          "flight_no": "TV2532",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 24,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "深圳航空",
+          "flight_no": "ZH2529",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "四川航空",
+          "flight_no": "3U4942",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 25,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "深圳航空",
+          "flight_no": "ZH2529",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "华夏航空",
+          "flight_no": "G59576",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 26,
+        "total_price": 3820,
+        "price_text": "¥3820起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "深圳航空",
+          "flight_no": "ZH2529",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "西藏航空",
+          "flight_no": "TV2532",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 27,
+        "total_price": 3830,
+        "price_text": "¥3830起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "厦门航空",
+          "flight_no": "MF5371",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 28,
+        "total_price": 3830,
+        "price_text": "¥3830起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "山东航空",
+          "flight_no": "SC2117",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "厦门航空",
+          "flight_no": "MF5371",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 29,
+        "total_price": 3830,
+        "price_text": "¥3830起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "西藏航空",
+          "flight_no": "TV3039",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "厦门航空",
+          "flight_no": "MF5371",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 30,
+        "total_price": 3830,
+        "price_text": "¥3830起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "深圳航空",
+          "flight_no": "ZH2529",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": true,
+          "stops": []
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "厦门航空",
+          "flight_no": "MF5371",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 31,
+        "total_price": 3900,
+        "price_text": "¥3900起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "中国国航",
+          "flight_no": "CA4611",
+          "departure_time": "17:40",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:40",
           "arrival_airport": "乌鲁木齐天山国际机场",
           "direct": true,
           "stops": []
@@ -1390,26 +2159,70 @@
         }
       },
       {
-        "rank": 44,
-        "total_price": 4050,
-        "price_text": "¥4050起往返总价",
+        "rank": 32,
+        "total_price": 3910,
+        "price_text": "¥3910起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "厦门航空",
-          "flight_no": "MF5370",
-          "departure_time": "18:00",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7520",
+          "departure_time": "16:05",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:35",
           "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
         },
         "return": {
           "date": "2026-10-08",
-          "airline": "成都航空",
-          "flight_no": "EU9232",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7519",
+          "departure_time": "08:15",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "14:50",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        }
+      },
+      {
+        "rank": 33,
+        "total_price": 3935,
+        "price_text": "¥3935起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7520",
+          "departure_time": "16:05",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:35",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "长龙航空",
+          "flight_no": "GJ8968",
           "departure_time": "07:40",
           "departure_airport": "乌鲁木齐天山国际机场",
           "arrival_time": "13:00",
@@ -1419,26 +2232,133 @@
         }
       },
       {
-        "rank": 45,
-        "total_price": 4090,
-        "price_text": "¥4090起往返总价",
+        "rank": 34,
+        "total_price": 3940,
+        "price_text": "¥3940起往返总价",
         "price_scope": "itinerary_starting_price",
         "currency": "CNY",
         "outbound": {
           "date": "2026-10-01",
-          "airline": "厦门航空",
-          "flight_no": "MF5370",
-          "departure_time": "18:00",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7520",
+          "departure_time": "16:05",
           "departure_airport": "萧山国际机场T3",
-          "arrival_time": "22:55",
+          "arrival_time": "22:35",
           "arrival_airport": "乌鲁木齐天山国际机场",
-          "direct": true,
-          "stops": []
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
         },
         "return": {
           "date": "2026-10-08",
-          "airline": "东方航空",
-          "flight_no": "MU3137",
+          "airline": "四川航空",
+          "flight_no": "3U4942",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 35,
+        "total_price": 3940,
+        "price_text": "¥3940起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7520",
+          "departure_time": "16:05",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:35",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "华夏航空",
+          "flight_no": "G59576",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 36,
+        "total_price": 3940,
+        "price_text": "¥3940起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7520",
+          "departure_time": "16:05",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:35",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "西藏航空",
+          "flight_no": "TV2532",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "direct": true,
+          "stops": []
+        }
+      },
+      {
+        "rank": 37,
+        "total_price": 3950,
+        "price_text": "¥3950起往返总价",
+        "price_scope": "itinerary_starting_price",
+        "currency": "CNY",
+        "outbound": {
+          "date": "2026-10-01",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7520",
+          "departure_time": "16:05",
+          "departure_airport": "萧山国际机场T3",
+          "arrival_time": "22:35",
+          "arrival_airport": "乌鲁木齐天山国际机场",
+          "direct": false,
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ]
+        },
+        "return": {
+          "date": "2026-10-08",
+          "airline": "厦门航空",
+          "flight_no": "MF5371",
           "departure_time": "07:40",
           "departure_airport": "乌鲁木齐天山国际机场",
           "arrival_time": "13:00",
