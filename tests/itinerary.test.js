@@ -155,6 +155,23 @@ test('selects at most five eligible outbounds by starting price', () => {
   );
 });
 
+test('filters incomplete outbounds before candidate sorting', () => {
+  const complete = leg({
+    flight_no: 'CZ8416',
+    price: { total_price: 3500 },
+  });
+  const incomplete = leg({
+    flight_no: null,
+    price: { total_price: 3500 },
+  });
+
+  assert.equal(isEligibleOutbound(incomplete), false);
+  assert.deepEqual(
+    selectOutboundCandidates([incomplete, complete]).map((item) => item.flight_no),
+    ['CZ8416'],
+  );
+});
+
 test('selects five direct and five connecting outbounds', () => {
   const direct = [3700, 3500, 3900, 3400, 3800, 3600, 4000].map(
     (price, index) => leg({
