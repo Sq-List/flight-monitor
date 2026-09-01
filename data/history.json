@@ -8883,5 +8883,49 @@
         "message": "Cannot read properties of null (reading 'localeCompare')"
       }
     ]
+  },
+  {
+    "schema_version": 2,
+    "collection_scope": "full_itinerary",
+    "status": "partial",
+    "checked_at": "2026-09-01T10:30:08.574+08:00",
+    "queries": [
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-09-30",
+        "return_date": "2026-10-08"
+      },
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-10-01",
+        "return_date": "2026-10-08"
+      }
+    ],
+    "scans": [
+      {
+        "date": "2026-09-30",
+        "status": "completed"
+      },
+      {
+        "date": "2026-10-01",
+        "status": "failed"
+      }
+    ],
+    "current": {
+      "availability": "none",
+      "best_total_price": null,
+      "currency": "CNY",
+      "itineraries": []
+    },
+    "errors": [
+      {
+        "date": "2026-10-01",
+        "stage": "outbound_list",
+        "code": "unexpected",
+        "message": "Cannot read properties of null (reading 'localeCompare')"
+      }
+    ]
   }
 ]
