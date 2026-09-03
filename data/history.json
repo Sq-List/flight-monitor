@@ -17008,5 +17008,85 @@
       ]
     },
     "errors": []
+  },
+  {
+    "schema_version": 2,
+    "collection_scope": "full_itinerary",
+    "status": "partial",
+    "checked_at": "2026-09-03T18:30:08.355+08:00",
+    "queries": [
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-09-30",
+        "return_date": "2026-10-08"
+      },
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-10-01",
+        "return_date": "2026-10-08"
+      }
+    ],
+    "scans": [
+      {
+        "date": "2026-09-30",
+        "status": "completed"
+      },
+      {
+        "date": "2026-10-01",
+        "status": "failed"
+      }
+    ],
+    "current": {
+      "availability": "none",
+      "best_total_price": null,
+      "currency": "CNY",
+      "itineraries": []
+    },
+    "errors": [
+      {
+        "date": "2026-10-01",
+        "stage": "outbound_select",
+        "code": "outbound_click_timeout",
+        "message": "locator.scrollIntoViewIfNeeded: Timeout 14986.991999999998ms exceeded.\nCall log:\n  - attempting scroll into view action\n    - waiting for element to be stable\n"
+      },
+      {
+        "date": "2026-10-01",
+        "stage": "outbound_select",
+        "code": "cards_not_found",
+        "message": "页面未发现航班卡片"
+      },
+      {
+        "date": "2026-10-01",
+        "stage": "outbound_select",
+        "code": "cards_not_found",
+        "message": "页面未发现航班卡片"
+      },
+      {
+        "date": "2026-10-01",
+        "stage": "outbound_select",
+        "code": "cards_not_found",
+        "message": "页面未发现航班卡片"
+      },
+      {
+        "date": "2026-10-01",
+        "stage": "outbound_select",
+        "code": "cards_not_found",
+        "message": "页面未发现航班卡片"
+      },
+      {
+        "date": "2026-10-01",
+        "stage": "outbound_select",
+        "code": "cards_not_found",
+        "message": "页面未发现航班卡片"
+      },
+      {
+        "date": "2026-10-01",
+        "stage": "outbound_select",
+        "code": "cards_not_found",
+        "message": "页面未发现航班卡片"
+      }
+    ]
   }
 ]
