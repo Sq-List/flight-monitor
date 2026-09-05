@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "collection_scope": "full_itinerary",
-  "status": "failed",
-  "checked_at": "2026-09-05T11:25:51.107+08:00",
+  "status": "partial",
+  "checked_at": "2026-09-05T17:31:28.021+08:00",
   "queries": [
     {
       "from": "HGH",
@@ -20,17 +20,22 @@
   "scans": [
     {
       "date": "2026-09-30",
-      "status": "failed"
+      "status": "completed"
     },
     {
       "date": "2026-10-01",
       "status": "failed"
     }
   ],
-  "current": null,
+  "current": {
+    "availability": "none",
+    "best_total_price": null,
+    "currency": "CNY",
+    "itineraries": []
+  },
   "errors": [
     {
-      "date": "2026-09-30",
+      "date": "2026-10-01",
       "stage": "run_timeout",
       "code": "run_timeout",
       "message": "整轮采集超过时间上限"

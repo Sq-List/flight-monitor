@@ -19516,5 +19516,49 @@
         "message": "整轮采集超过时间上限"
       }
     ]
+  },
+  {
+    "schema_version": 2,
+    "collection_scope": "full_itinerary",
+    "status": "partial",
+    "checked_at": "2026-09-05T17:31:28.021+08:00",
+    "queries": [
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-09-30",
+        "return_date": "2026-10-08"
+      },
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-10-01",
+        "return_date": "2026-10-08"
+      }
+    ],
+    "scans": [
+      {
+        "date": "2026-09-30",
+        "status": "completed"
+      },
+      {
+        "date": "2026-10-01",
+        "status": "failed"
+      }
+    ],
+    "current": {
+      "availability": "none",
+      "best_total_price": null,
+      "currency": "CNY",
+      "itineraries": []
+    },
+    "errors": [
+      {
+        "date": "2026-10-01",
+        "stage": "run_timeout",
+        "code": "run_timeout",
+        "message": "整轮采集超过时间上限"
+      }
+    ]
   }
 ]
