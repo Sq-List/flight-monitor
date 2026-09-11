@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process';
-import { mkdir, readFile, rm } from 'node:fs/promises';
-import { homedir } from 'node:os';
+import { mkdir, mkdtemp, readFile, rm } from 'node:fs/promises';
+import { homedir, tmpdir } from 'node:os';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { promisify } from 'node:util';
@@ -8,6 +8,32 @@ import { promisify } from 'node:util';
 import { chromium } from 'playwright';
 
 const execFileAsync = promisify(execFile);
+
+// 读取当前 macOS Wi-Fi 名称；识别失败时由调用方使用未登录模式。
+export async function currentWifiSsid({
+  platform = process.platform,
+  run = execFileAsync,
+} = {}) {
+  if (platform !== 'darwin') return null;
+
+  try {
+    const { stdout: hardwarePorts } = await run(
+      '/usr/sbin/networksetup',
+      ['-listallhardwareports'],
+    );
+    const device = /Hardware Port:\s*(?:Wi-Fi|AirPort)\s*\r?\nDevice:\s*(\S+)/
+      .exec(hardwarePorts)?.[1];
+    if (!device) return null;
+
+    const { stdout: summary } = await run(
+      '/usr/sbin/ipconfig',
+      ['getsummary', device],
+    );
+    return /^\s*SSID\s*:\s*(.+?)\s*$/m.exec(summary)?.[1] ?? null;
+  } catch {
+    return null;
+  }
+}
 
 function applicationBundle(executablePath) {
   const match = /^(.*\.app)\/Contents\/MacOS\/.+$/.exec(executablePath);
@@ -171,4 +197,38 @@ export async function launchVisibleChromiumInBackground({
     await cleanupProfile().catch(() => {});
     throw error;
   }
+}
+
+// 未登录模式每轮使用一次性用户目录，关闭浏览器后不保留登录信息。
+export async function launchAnonymousChromiumInBackground({
+  createProfileDir = () => mkdtemp(
+    path.join(tmpdir(), 'flight-monitor-anonymous-'),
+  ),
+  launch = launchVisibleChromiumInBackground,
+  removeProfile = (directory) => rm(directory, {
+    recursive: true,
+    force: true,
+  }),
+} = {}) {
+  const profileDir = await createProfileDir();
+  let browser;
+  try {
+    browser = await launch({ profileDir });
+  } catch (error) {
+    await removeProfile(profileDir);
+    throw error;
+  }
+
+  return {
+    async newPage(options) {
+      return browser.newPage(options);
+    },
+    async close() {
+      try {
+        await browser.close();
+      } finally {
+        await removeProfile(profileDir);
+      }
+    },
+  };
 }

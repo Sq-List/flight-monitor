@@ -2,8 +2,70 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {
+  currentWifiSsid,
+  launchAnonymousChromiumInBackground,
   launchVisibleChromiumInBackground,
 } from '../src/macos-focus.js';
+
+test('reads the current SSID from the macOS Wi-Fi interface', async () => {
+  const calls = [];
+  const ssid = await currentWifiSsid({
+    platform: 'darwin',
+    run: async (file, args) => {
+      calls.push([file, args]);
+      if (file === '/usr/sbin/networksetup') {
+        return {
+          stdout: 'Hardware Port: Wi-Fi\nDevice: en0\nEthernet Address: 00:00:00:00:00:00\n',
+        };
+      }
+      return { stdout: '  SSID : gogogo\n' };
+    },
+  });
+
+  assert.equal(ssid, 'gogogo');
+  assert.deepEqual(calls, [
+    ['/usr/sbin/networksetup', ['-listallhardwareports']],
+    ['/usr/sbin/ipconfig', ['getsummary', 'en0']],
+  ]);
+});
+
+test('uses no SSID when Wi-Fi detection fails', async () => {
+  assert.equal(await currentWifiSsid({
+    platform: 'darwin',
+    run: async () => {
+      throw new Error('not associated');
+    },
+  }), null);
+});
+
+test('removes the anonymous Chromium profile after closing', async () => {
+  const events = [];
+  const browser = await launchAnonymousChromiumInBackground({
+    createProfileDir: async () => '/tmp/flight-monitor-anonymous-test',
+    launch: async (options) => {
+      events.push(['launch', options]);
+      return {
+        async newPage(options) {
+          events.push(['page', options]);
+          return { id: 'page' };
+        },
+        async close() {
+          events.push(['close']);
+        },
+      };
+    },
+    removeProfile: async (directory) => events.push(['remove', directory]),
+  });
+
+  assert.deepEqual(await browser.newPage({ locale: 'zh-CN' }), { id: 'page' });
+  await browser.close();
+  assert.deepEqual(events, [
+    ['launch', { profileDir: '/tmp/flight-monitor-anonymous-test' }],
+    ['page', { locale: 'zh-CN' }],
+    ['close'],
+    ['remove', '/tmp/flight-monitor-anonymous-test'],
+  ]);
+});
 
 test('reuses a dedicated Chromium profile and its default context', async () => {
   const events = [];

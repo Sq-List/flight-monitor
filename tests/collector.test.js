@@ -6,6 +6,7 @@ import {
   collectFromCtrip,
   collectItineraries,
   headlessFromEnvironment,
+  launchBrowserForCollection,
 } from '../src/collector.js';
 
 const query = {
@@ -31,6 +32,51 @@ test('uses visible Chromium only when explicitly disabled', () => {
     headlessFromEnvironment({ FLIGHT_MONITOR_HEADLESS: 'false' }),
     false,
   );
+});
+
+test('uses the logged-in browser profile on the home Wi-Fi', async () => {
+  const expected = { id: 'logged-in-browser' };
+  const browser = await launchBrowserForCollection({
+    headless: false,
+    platform: 'darwin',
+    getWifiSsid: async () => 'gogogo',
+    launchLoggedInBrowser: async () => expected,
+    launchAnonymousBrowser: async () => {
+      throw new Error('should not use anonymous browser');
+    },
+  });
+
+  assert.equal(browser, expected);
+});
+
+test('uses an anonymous browser profile away from the home Wi-Fi', async () => {
+  const expected = { id: 'anonymous-browser' };
+  const browser = await launchBrowserForCollection({
+    headless: false,
+    platform: 'darwin',
+    getWifiSsid: async () => 'company-wifi',
+    launchLoggedInBrowser: async () => {
+      throw new Error('should not use logged-in browser');
+    },
+    launchAnonymousBrowser: async () => expected,
+  });
+
+  assert.equal(browser, expected);
+});
+
+test('uses an anonymous browser profile when Wi-Fi cannot be identified', async () => {
+  const expected = { id: 'anonymous-browser' };
+  const browser = await launchBrowserForCollection({
+    headless: false,
+    platform: 'darwin',
+    getWifiSsid: async () => null,
+    launchLoggedInBrowser: async () => {
+      throw new Error('should not use logged-in browser');
+    },
+    launchAnonymousBrowser: async () => expected,
+  });
+
+  assert.equal(browser, expected);
 });
 
 const queries = [

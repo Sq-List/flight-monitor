@@ -2,6 +2,8 @@ import { chromium } from 'playwright';
 
 import { createCtripPageSession } from './ctrip-page.js';
 import {
+  currentWifiSsid,
+  launchAnonymousChromiumInBackground,
   launchVisibleChromiumInBackground,
 } from './macos-focus.js';
 import {
@@ -29,9 +31,15 @@ export function buildSearchUrl(query) {
 export async function launchBrowserForCollection({
   headless,
   platform = process.platform,
+  getWifiSsid = currentWifiSsid,
+  launchLoggedInBrowser = launchVisibleChromiumInBackground,
+  launchAnonymousBrowser = launchAnonymousChromiumInBackground,
 } = {}) {
   if (!headless && platform === 'darwin') {
-    return launchVisibleChromiumInBackground();
+    const ssid = await getWifiSsid({ platform });
+    return ssid === 'gogogo'
+      ? launchLoggedInBrowser()
+      : launchAnonymousBrowser();
   }
   return chromium.launch({ headless });
 }
