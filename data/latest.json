@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "collection_scope": "full_itinerary",
-  "status": "failed",
-  "checked_at": "2026-09-12T14:40:57.921+08:00",
+  "status": "partial",
+  "checked_at": "2026-09-12T18:44:57.398+08:00",
   "queries": [
     {
       "from": "HGH",
@@ -20,26 +20,25 @@
   "scans": [
     {
       "date": "2026-09-30",
-      "status": "failed"
+      "status": "completed"
     },
     {
       "date": "2026-10-01",
       "status": "failed"
     }
   ],
-  "current": null,
+  "current": {
+    "availability": "none",
+    "best_total_price": null,
+    "currency": "CNY",
+    "itineraries": []
+  },
   "errors": [
     {
-      "date": "2026-09-30",
-      "stage": "outbound_list",
-      "code": "unexpected",
-      "message": "page.waitForTimeout: Target page, context or browser has been closed"
-    },
-    {
       "date": "2026-10-01",
-      "stage": "outbound_list",
-      "code": "unexpected",
-      "message": "page.goto: Target page, context or browser has been closed"
+      "stage": "run_timeout",
+      "code": "run_timeout",
+      "message": "整轮采集超过时间上限"
     }
   ],
   "last_success": {
