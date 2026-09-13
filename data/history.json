@@ -26108,5 +26108,50 @@
         "message": "整轮采集超过时间上限"
       }
     ]
+  },
+  {
+    "schema_version": 2,
+    "collection_scope": "full_itinerary",
+    "status": "failed",
+    "checked_at": "2026-09-13T10:30:09.651+08:00",
+    "queries": [
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-09-30",
+        "return_date": "2026-10-08"
+      },
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-10-01",
+        "return_date": "2026-10-08"
+      }
+    ],
+    "scans": [
+      {
+        "date": "2026-09-30",
+        "status": "failed"
+      },
+      {
+        "date": "2026-10-01",
+        "status": "failed"
+      }
+    ],
+    "current": null,
+    "errors": [
+      {
+        "date": "2026-09-30",
+        "stage": "outbound_list",
+        "code": "login_required",
+        "message": "携程要求重新登录采集器专用浏览器"
+      },
+      {
+        "date": "2026-10-01",
+        "stage": "outbound_list",
+        "code": "login_required",
+        "message": "携程要求重新登录采集器专用浏览器"
+      }
+    ]
   }
 ]
