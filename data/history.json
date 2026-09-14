@@ -27735,5 +27735,44 @@
         "message": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-10-01_2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0\", waiting until \"domcontentloaded\"\n"
       }
     ]
+  },
+  {
+    "schema_version": 2,
+    "collection_scope": "full_itinerary",
+    "status": "failed",
+    "checked_at": "2026-09-14T18:45:17.497+08:00",
+    "queries": [
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-09-30",
+        "return_date": "2026-10-08"
+      },
+      {
+        "from": "HGH",
+        "to": "URC",
+        "depart_date": "2026-10-01",
+        "return_date": "2026-10-08"
+      }
+    ],
+    "scans": [
+      {
+        "date": "2026-09-30",
+        "status": "failed"
+      },
+      {
+        "date": "2026-10-01",
+        "status": "failed"
+      }
+    ],
+    "current": null,
+    "errors": [
+      {
+        "date": "2026-09-30",
+        "stage": "run_timeout",
+        "code": "run_timeout",
+        "message": "整轮采集超过时间上限"
+      }
+    ]
   }
 ]
