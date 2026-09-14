@@ -2,7 +2,7 @@
   "schema_version": 2,
   "collection_scope": "full_itinerary",
   "status": "failed",
-  "checked_at": "2026-09-13T19:14:29.903+08:00",
+  "checked_at": "2026-09-14T11:20:54.289+08:00",
   "queries": [
     {
       "from": "HGH",
@@ -31,15 +31,9 @@
   "errors": [
     {
       "date": "2026-09-30",
-      "stage": "outbound_list",
-      "code": "unexpected",
-      "message": "page.goto: Target page, context or browser has been closed\nCall log:\n  - navigating to \"https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-09-30_2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0\", waiting until \"domcontentloaded\"\n"
-    },
-    {
-      "date": "2026-10-01",
-      "stage": "outbound_list",
-      "code": "unexpected",
-      "message": "page.goto: Target page, context or browser has been closed"
+      "stage": "run_timeout",
+      "code": "run_timeout",
+      "message": "整轮采集超过时间上限"
     }
   ],
   "last_success": {
