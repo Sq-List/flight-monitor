@@ -2,7 +2,7 @@
   "schema_version": 2,
   "collection_scope": "full_itinerary",
   "status": "partial",
-  "checked_at": "2026-09-15T14:30:08.545+08:00",
+  "checked_at": "2026-09-15T18:30:05.393+08:00",
   "queries": [
     {
       "from": "HGH",
@@ -38,7 +38,7 @@
       "date": "2026-10-01",
       "stage": "outbound_select",
       "code": "outbound_click_timeout",
-      "message": "locator.scrollIntoViewIfNeeded: Timeout 14986.354999999996ms exceeded.\nCall log:\n  - attempting scroll into view action\n    - waiting for element to be stable\n"
+      "message": "locator.scrollIntoViewIfNeeded: Timeout 14981.032999999996ms exceeded.\nCall log:\n  - attempting scroll into view action\n    - waiting for element to be stable\n"
     },
     {
       "date": "2026-10-01",
