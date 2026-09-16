@@ -3,16 +3,9 @@ import { runCollection } from './run.js';
 
 const queries = [
   {
-    from: 'HGH',
-    to: 'URC',
-    depart_date: '2026-09-30',
-    return_date: '2026-10-08',
-  },
-  {
-    from: 'HGH',
-    to: 'URC',
-    depart_date: '2026-10-01',
-    return_date: '2026-10-08',
+    from: 'URC',
+    to: 'HGH',
+    depart_date: '2026-10-08',
   },
 ];
 

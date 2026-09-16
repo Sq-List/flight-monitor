@@ -4,113 +4,18 @@ import test from 'node:test';
 import {
   buildSearchUrl,
   collectFromCtrip,
-  collectItineraries,
+  collectReturnFlights,
   headlessFromEnvironment,
   launchBrowserForCollection,
 } from '../src/collector.js';
 
 const query = {
-  from: 'HGH',
-  to: 'URC',
-  depart_date: '2026-10-01',
-  return_date: '2026-10-08',
+  from: 'URC',
+  to: 'HGH',
+  depart_date: '2026-10-08',
 };
 
-test('builds the exact Ctrip round-trip URL', () => {
-  assert.equal(
-    buildSearchUrl(query),
-    'https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-10-01_2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0',
-  );
-});
-
-test('uses headless Chromium by default', () => {
-  assert.equal(headlessFromEnvironment({}), true);
-});
-
-test('uses visible Chromium only when explicitly disabled', () => {
-  assert.equal(
-    headlessFromEnvironment({ FLIGHT_MONITOR_HEADLESS: 'false' }),
-    false,
-  );
-});
-
-test('uses the logged-in browser profile on the home Wi-Fi', async () => {
-  const expected = { id: 'logged-in-browser' };
-  const browser = await launchBrowserForCollection({
-    headless: false,
-    platform: 'darwin',
-    getWifiSsid: async () => 'gogogo',
-    launchLoggedInBrowser: async () => expected,
-    launchAnonymousBrowser: async () => {
-      throw new Error('should not use anonymous browser');
-    },
-  });
-
-  assert.equal(browser, expected);
-});
-
-test('uses an anonymous browser profile away from the home Wi-Fi', async () => {
-  const expected = { id: 'anonymous-browser' };
-  const browser = await launchBrowserForCollection({
-    headless: false,
-    platform: 'darwin',
-    getWifiSsid: async () => 'company-wifi',
-    launchLoggedInBrowser: async () => {
-      throw new Error('should not use logged-in browser');
-    },
-    launchAnonymousBrowser: async () => expected,
-  });
-
-  assert.equal(browser, expected);
-});
-
-test('uses an anonymous browser profile when Wi-Fi cannot be identified', async () => {
-  const expected = { id: 'anonymous-browser' };
-  const browser = await launchBrowserForCollection({
-    headless: false,
-    platform: 'darwin',
-    getWifiSsid: async () => null,
-    launchLoggedInBrowser: async () => {
-      throw new Error('should not use logged-in browser');
-    },
-    launchAnonymousBrowser: async () => expected,
-  });
-
-  assert.equal(browser, expected);
-});
-
-const queries = [
-  {
-    from: 'HGH',
-    to: 'URC',
-    depart_date: '2026-09-30',
-    return_date: '2026-10-08',
-  },
-  {
-    from: 'HGH',
-    to: 'URC',
-    depart_date: '2026-10-01',
-    return_date: '2026-10-08',
-  },
-];
-
-function outbound(date, flightNo, departureTime) {
-  return {
-    date,
-    airline: '测试航空',
-    flight_no: flightNo,
-    departure_time: departureTime,
-    departure_airport: '杭州萧山国际机场',
-    arrival_time: '00:40+1',
-    arrival_airport: '乌鲁木齐天山国际机场',
-    direct: true,
-    stops: [],
-    signature: `${flightNo}|${departureTime}|00:40+1`,
-    price: null,
-  };
-}
-
-function returnCard(price = 3500) {
+function flight(overrides = {}) {
   return {
     date: '2026-10-08',
     airline: '测试航空',
@@ -119,178 +24,125 @@ function returnCard(price = 3500) {
     departure_airport: '乌鲁木齐天山国际机场',
     arrival_time: '15:00',
     arrival_airport: '杭州萧山国际机场',
-    direct: true,
+    service_type: 'direct',
     stops: [],
     signature: 'AB5678|08:00|15:00',
-    price: {
-      total_price: price,
-      price_text: `往返含税 ¥${price}`,
-      price_scope: 'itinerary_starting_price',
-      currency: 'CNY',
-    },
+    price: 1880,
+    price_text: '¥1880起',
+    price_scope: 'flight_starting_price',
+    currency: 'CNY',
+    ...overrides,
   };
 }
 
-test('collects two dates sequentially and ranks exact totals', async () => {
-  const calls = [];
-  const session = {
-    async listOutbounds(query) {
-      calls.push(`out:${query.depart_date}`);
-      return [outbound(
-        query.depart_date,
-        query.depart_date === '2026-09-30' ? 'AB1234' : 'AB1235',
-        query.depart_date === '2026-09-30' ? '21:00' : '18:00',
-      )];
-    },
-    async listReturns(query) {
-      calls.push(`return:${query.depart_date}`);
-      return [returnCard(query.depart_date === '2026-09-30' ? 3600 : 3500)];
-    },
-  };
-  const result = await collectItineraries({ queries, session, timeoutMs: 1000 });
-  assert.deepEqual(calls, [
-    'out:2026-09-30',
-    'return:2026-09-30',
-    'out:2026-10-01',
-    'return:2026-10-01',
-  ]);
-  assert.deepEqual(result.scans.map((scan) => scan.status), [
-    'completed',
-    'completed',
-  ]);
-  assert.equal(result.itineraries[0].total_price, 3500);
+test('builds the exact Ctrip one-way return URL', () => {
+  assert.equal(
+    buildSearchUrl(query),
+    'https://flights.ctrip.com/online/list/oneway-urc-hgh?depdate=2026-10-08&cabin=Y_S_C_F&adult=1&child=0&infant=0',
+  );
 });
 
-test('stops one date on captcha and still completes the other date', async () => {
-  const session = {
-    async listOutbounds(query) {
-      if (query.depart_date === '2026-09-30') {
+test('uses headless Chromium by default', () => {
+  assert.equal(headlessFromEnvironment({}), true);
+});
+
+test('uses visible Chromium only when explicitly disabled', () => {
+  assert.equal(headlessFromEnvironment({ FLIGHT_MONITOR_HEADLESS: 'false' }), false);
+});
+
+test('uses the logged-in browser profile on the home Wi-Fi', async () => {
+  const expected = { id: 'logged-in-browser' };
+  assert.equal(await launchBrowserForCollection({
+    headless: false,
+    platform: 'darwin',
+    getWifiSsid: async () => 'gogogo',
+    launchLoggedInBrowser: async () => expected,
+    launchAnonymousBrowser: async () => {
+      throw new Error('should not use anonymous browser');
+    },
+  }), expected);
+});
+
+test('uses an anonymous browser profile away from the home Wi-Fi', async () => {
+  const expected = { id: 'anonymous-browser' };
+  assert.equal(await launchBrowserForCollection({
+    headless: false,
+    platform: 'darwin',
+    getWifiSsid: async () => 'company-wifi',
+    launchLoggedInBrowser: async () => {
+      throw new Error('should not use logged-in browser');
+    },
+    launchAnonymousBrowser: async () => expected,
+  }), expected);
+});
+
+test('uses an anonymous browser profile when Wi-Fi cannot be identified', async () => {
+  const expected = { id: 'anonymous-browser' };
+  assert.equal(await launchBrowserForCollection({
+    headless: false,
+    platform: 'darwin',
+    getWifiSsid: async () => null,
+    launchLoggedInBrowser: async () => {
+      throw new Error('should not use logged-in browser');
+    },
+    launchAnonymousBrowser: async () => expected,
+  }), expected);
+});
+
+test('collects one return date and ranks eligible one-way prices', async () => {
+  const calls = [];
+  const result = await collectReturnFlights({
+    queries: [query],
+    session: {
+      async listFlights(requestedQuery) {
+        calls.push(requestedQuery);
+        return [
+          flight({ flight_no: 'AB5679', price: 1990, price_text: '¥1990起' }),
+          flight({ flight_no: 'AB5680', arrival_time: '18:01', price: 1700, price_text: '¥1700起' }),
+          flight({ flight_no: 'AB5681', service_type: 'transfer', price: 1600, price_text: '¥1600起' }),
+          flight(),
+        ];
+      },
+    },
+    timeoutMs: 1000,
+  });
+
+  assert.deepEqual(calls, [query]);
+  assert.deepEqual(result.scans, [{ date: '2026-10-08', status: 'completed' }]);
+  assert.deepEqual(result.flights.map((item) => item.price), [1880, 1990]);
+  assert.equal(result.flights[0].signature, undefined);
+});
+
+test('records a captcha as a failed return scan', async () => {
+  const result = await collectReturnFlights({
+    queries: [query],
+    session: {
+      async listFlights() {
         throw Object.assign(new Error('验证码'), {
           code: 'captcha',
-          stage: 'outbound_list',
+          stage: 'flight_list',
         });
-      }
-      return [outbound(query.depart_date, 'AB1235', '18:00')];
+      },
     },
-    async listReturns() {
-      return [returnCard()];
-    },
-  };
-  const result = await collectItineraries({ queries, session, timeoutMs: 1000 });
-  assert.deepEqual(result.scans.map((scan) => scan.status), ['failed', 'completed']);
+    timeoutMs: 1000,
+  });
+
+  assert.deepEqual(result.scans, [{ date: '2026-10-08', status: 'failed' }]);
+  assert.equal(result.flights.length, 0);
   assert.equal(result.errors[0].code, 'captcha');
-  assert.equal(result.itineraries.length, 1);
 });
 
-test('continues later candidates after one outbound click fails', async () => {
-  const attempts = [];
-  const session = {
-    async listOutbounds() {
-      return [
-        outbound('2026-10-01', 'AB1235', '18:00'),
-        outbound('2026-10-01', 'AB1236', '19:00'),
-      ];
-    },
-    async listReturns(_query, selectedOutbound) {
-      attempts.push(selectedOutbound.flight_no);
-      if (selectedOutbound.flight_no === 'AB1235') {
-        throw Object.assign(new Error('去程按钮点击超时'), {
-          code: 'outbound_click_timeout',
-          stage: 'outbound_select',
-        });
-      }
-      return [returnCard(3600)];
-    },
-  };
-
-  const result = await collectItineraries({
-    queries: [queries[1]],
-    session,
-    timeoutMs: 1000,
-  });
-
-  assert.deepEqual(attempts, ['AB1235', 'AB1236']);
-  assert.equal(result.itineraries.length, 1);
-  assert.equal(result.itineraries[0].total_price, 3600);
-  assert.deepEqual(result.scans, [{ date: '2026-10-01', status: 'failed' }]);
-  assert.equal(result.errors[0].code, 'outbound_click_timeout');
-});
-
-test('preserves the completed date when the second date reaches the total deadline', async () => {
-  const session = {
-    async listOutbounds(query) {
-      if (query.depart_date === '2026-10-01') return new Promise(() => {});
-      return [outbound(query.depart_date, 'AB1234', '21:00')];
-    },
-    async listReturns() {
-      return [returnCard(3600)];
-    },
-  };
-  const result = await collectItineraries({ queries, session, timeoutMs: 100 });
-  assert.deepEqual(result.scans.map((scan) => scan.status), ['completed', 'failed']);
-  assert.equal(result.itineraries[0].total_price, 3600);
-  assert.equal(result.errors[0].code, 'run_timeout');
-});
-
-test('logs date, candidate progress, accepted returns and elapsed time', async () => {
+test('logs the return card and accepted counts', async () => {
   const logs = [];
-  let currentTime = 0;
-  await collectItineraries({
-    queries: [queries[1]],
-    session: {
-      async listOutbounds() {
-        return [outbound('2026-10-01', 'AB1235', '18:00')];
-      },
-      async listReturns() {
-        return [returnCard()];
-      },
-    },
-    timeoutMs: 1000,
-    logger: (line) => logs.push(line),
-    now: () => {
-      currentTime += 100;
-      return currentTime;
-    },
-  });
-  assert.equal(
-    logs.some((line) => line.includes('[2026-10-01] 合格去程 1，选取 1')),
-    true,
-  );
-  assert.equal(logs.some((line) => line.includes('候选 1/1 AB1235')), true);
-  assert.equal(logs.some((line) => line.includes('有效返程 1')), true);
-  assert.equal(logs.some((line) => line.includes('日期完成')), true);
-});
-
-test('counts only complete return combinations in progress logs', async () => {
-  const logs = [];
-  const incompleteReturn = {
-    ...returnCard(3600),
-    flight_no: null,
-  };
-
-  const result = await collectItineraries({
-    queries: [queries[1]],
-    session: {
-      async listOutbounds() {
-        return [outbound('2026-10-01', 'AB1235', '18:00')];
-      },
-      async listReturns() {
-        return [returnCard(), incompleteReturn];
-      },
-    },
+  await collectReturnFlights({
+    queries: [query],
+    session: { async listFlights() { return [flight()]; } },
     timeoutMs: 1000,
     logger: (line) => logs.push(line),
   });
 
-  assert.equal(result.itineraries.length, 1);
-  assert.equal(
-    logs.some((line) => line.includes('有效返程 1，累计组合 1')),
-    true,
-  );
-  assert.equal(
-    logs.some((line) => line.includes('整轮完成') && line.includes('累计组合 1')),
-    true,
-  );
+  assert.equal(logs.some((line) => line.includes('航班卡片 1，合格返程 1')), true);
+  assert.equal(logs.some((line) => line.includes('整轮完成') && line.includes('合格返程 1')), true);
 });
 
 test('creates one page for the whole collection', async () => {

@@ -1,20 +1,20 @@
-function currentFrom(itineraries) {
+function currentFrom(flights) {
   return {
-    availability: itineraries.length > 0 ? 'available' : 'none',
-    best_total_price: itineraries[0]?.total_price ?? null,
-    currency: itineraries[0]?.currency ?? 'CNY',
-    itineraries,
+    availability: flights.length > 0 ? 'available' : 'none',
+    best_price: flights[0]?.price ?? null,
+    currency: flights[0]?.currency ?? 'CNY',
+    flights,
   };
 }
 
-function previousFullLastSuccess(previousLatest) {
-  return previousLatest?.schema_version === 2
-    && previousLatest?.collection_scope === 'full_itinerary'
+function previousReturnLastSuccess(previousLatest) {
+  return previousLatest?.schema_version === 3
+    && previousLatest?.collection_scope === 'return_one_way'
     ? previousLatest.last_success ?? null
     : null;
 }
 
-// 生成完整行程 schema v2；旧起价历史保留，但不能成为 v2 的最近成功结果。
+// 生成返程单程 schema v3；旧往返历史保留，但不能成为新口径的最近成功结果。
 export function buildNextState({
   previousLatest,
   history,
@@ -30,14 +30,14 @@ export function buildNextState({
     : completed > 0
       ? 'partial'
       : 'failed';
-  const current = status === 'failed' ? null : currentFrom(collection.itineraries);
-  const isFullSuccess = status === 'success' && collection.itineraries.length > 0;
+  const current = status === 'failed' ? null : currentFrom(collection.flights);
+  const isFullSuccess = status === 'success' && collection.flights.length > 0;
   const lastSuccess = isFullSuccess
     ? { checked_at: checkedAt, ...current }
-    : previousFullLastSuccess(previousLatest);
+    : previousReturnLastSuccess(previousLatest);
   const entry = {
-    schema_version: 2,
-    collection_scope: 'full_itinerary',
+    schema_version: 3,
+    collection_scope: 'return_one_way',
     status,
     checked_at: checkedAt,
     queries,

@@ -3,164 +3,122 @@ import test from 'node:test';
 
 import { buildNextState } from '../src/state.js';
 
-const queries = [
-  {
-    from: 'HGH',
-    to: 'URC',
-    depart_date: '2026-09-30',
-    return_date: '2026-10-08',
-  },
-  {
-    from: 'HGH',
-    to: 'URC',
-    depart_date: '2026-10-01',
-    return_date: '2026-10-08',
-  },
-];
+const queries = [{
+  from: 'URC',
+  to: 'HGH',
+  depart_date: '2026-10-08',
+}];
 
 const complete = {
   rank: 1,
-  total_price: 3500,
-  price_text: '往返含税 ¥3500',
-  price_scope: 'itinerary_starting_price',
+  date: '2026-10-08',
+  airline: '长龙航空',
+  flight_no: 'GJ8968',
+  departure_time: '07:30',
+  departure_airport: '乌鲁木齐天山国际机场T3',
+  arrival_time: '12:30',
+  arrival_airport: '杭州萧山国际机场T3',
+  service_type: 'direct',
+  stops: [],
+  price: 1880,
+  price_text: '¥1880起',
+  price_scope: 'flight_starting_price',
   currency: 'CNY',
-  outbound: {
-    date: '2026-10-01',
-    airline: '测试航空',
-    flight_no: 'AB1234',
-    departure_time: '18:00',
-    departure_airport: '杭州萧山国际机场',
-    arrival_time: '00:40+1',
-    arrival_airport: '乌鲁木齐天山国际机场',
-    direct: true,
-    stops: [],
-  },
-  return: {
-    date: '2026-10-08',
-    airline: '测试航空',
-    flight_no: 'AB5678',
-    departure_time: '08:00',
-    departure_airport: '乌鲁木齐天山国际机场',
-    arrival_time: '15:00',
-    arrival_airport: '杭州萧山国际机场',
-    direct: true,
-    stops: [],
-  },
 };
 
 const legacyHistory = [{
-  checked_at: '2026-08-24T10:30:00+08:00',
+  schema_version: 2,
+  collection_scope: 'full_itinerary',
+  checked_at: '2026-09-15T10:30:00+08:00',
   status: 'success',
-  current: { best_price: 3538 },
 }];
 
-test('writes a full two-date success and preserves legacy history unchanged', () => {
-  const allItineraries = Array.from({ length: 7 }, (_, index) => ({
+test('writes a schema v3 return-only success and preserves old history', () => {
+  const flights = Array.from({ length: 7 }, (_, index) => ({
     ...complete,
     rank: index + 1,
-    total_price: 3500 + index,
-    price_text: `往返含税 ¥${3500 + index}`,
+    flight_no: `AB12${index}0`,
+    price: 1880 + index,
+    price_text: `¥${1880 + index}起`,
   }));
   const next = buildNextState({
-    previousLatest: { schema_version: 1, last_success: { best_price: 3538 } },
+    previousLatest: legacyHistory[0],
     history: legacyHistory,
     queries,
-    checkedAt: '2026-08-25T10:30:00+08:00',
+    checkedAt: '2026-09-16T10:30:00+08:00',
     collection: {
-      scans: queries.map((query) => ({
-        date: query.depart_date,
-        status: 'completed',
-      })),
-      itineraries: allItineraries,
+      scans: [{ date: '2026-10-08', status: 'completed' }],
+      flights,
       errors: [],
     },
   });
-  assert.equal(next.latest.schema_version, 2);
-  assert.equal(next.latest.collection_scope, 'full_itinerary');
+
+  assert.equal(next.latest.schema_version, 3);
+  assert.equal(next.latest.collection_scope, 'return_one_way');
   assert.equal(next.latest.status, 'success');
-  assert.equal(next.latest.current.best_total_price, 3500);
-  assert.equal(next.latest.last_success.best_total_price, 3500);
-  assert.equal(next.latest.current.itineraries.length, 7);
-  assert.equal(next.latest.last_success.itineraries.length, 7);
+  assert.equal(next.latest.current.best_price, 1880);
+  assert.equal(next.latest.current.flights.length, 7);
+  assert.equal(next.latest.last_success.best_price, 1880);
   assert.deepEqual(next.history[0], legacyHistory[0]);
-  assert.equal(next.history[1].collection_scope, 'full_itinerary');
-  assert.equal(next.history[1].current.itineraries.length, 7);
+  assert.equal(next.history[1].collection_scope, 'return_one_way');
 });
 
-test('records success with availability none without replacing last success', () => {
+test('does not use an old round-trip result as return last success', () => {
+  const next = buildNextState({
+    previousLatest: legacyHistory[0],
+    history: [],
+    queries,
+    checkedAt: '2026-09-16T14:30:00+08:00',
+    collection: {
+      scans: [{ date: '2026-10-08', status: 'completed' }],
+      flights: [],
+      errors: [],
+    },
+  });
+
+  assert.equal(next.latest.current.availability, 'none');
+  assert.equal(next.latest.last_success, null);
+});
+
+test('keeps a previous schema v3 return result when no fare is available', () => {
   const previous = {
-    schema_version: 2,
-    collection_scope: 'full_itinerary',
-    last_success: { best_total_price: 3500 },
+    schema_version: 3,
+    collection_scope: 'return_one_way',
+    last_success: { best_price: 1880 },
   };
   const next = buildNextState({
     previousLatest: previous,
     history: [],
     queries,
-    checkedAt: '2026-08-25T14:30:00+08:00',
+    checkedAt: '2026-09-16T18:30:00+08:00',
     collection: {
-      scans: queries.map((query) => ({
-        date: query.depart_date,
-        status: 'completed',
-      })),
-      itineraries: [],
+      scans: [{ date: '2026-10-08', status: 'completed' }],
+      flights: [],
       errors: [],
     },
   });
-  assert.equal(next.latest.status, 'success');
-  assert.equal(next.latest.current.availability, 'none');
-  assert.equal(next.latest.last_success.best_total_price, 3500);
+
+  assert.equal(next.latest.last_success.best_price, 1880);
 });
 
-test('records partial with valid itineraries and preserves last success', () => {
+test('records failed when the return date does not complete', () => {
   const next = buildNextState({
-    previousLatest: {
-      schema_version: 2,
-      collection_scope: 'full_itinerary',
-      last_success: { best_total_price: 3600 },
-    },
+    previousLatest: null,
     history: [],
     queries,
-    checkedAt: '2026-08-25T18:30:00+08:00',
+    checkedAt: '2026-09-16T18:30:00+08:00',
     collection: {
-      scans: [
-        { date: '2026-09-30', status: 'failed' },
-        { date: '2026-10-01', status: 'completed' },
-      ],
-      itineraries: [complete],
+      scans: [{ date: '2026-10-08', status: 'failed' }],
+      flights: [],
       errors: [{
-        date: '2026-09-30',
-        stage: 'outbound_list',
+        date: '2026-10-08',
+        stage: 'flight_list',
         code: 'captcha',
         message: '验证码',
       }],
     },
   });
-  assert.equal(next.latest.status, 'partial');
-  assert.equal(next.latest.current.best_total_price, 3500);
-  assert.equal(next.latest.last_success.best_total_price, 3600);
-});
 
-test('records failed when neither date completes', () => {
-  const next = buildNextState({
-    previousLatest: null,
-    history: [],
-    queries,
-    checkedAt: '2026-08-25T18:30:00+08:00',
-    collection: {
-      scans: queries.map((query) => ({
-        date: query.depart_date,
-        status: 'failed',
-      })),
-      itineraries: [],
-      errors: [{
-        date: null,
-        stage: 'run_timeout',
-        code: 'run_timeout',
-        message: '超时',
-      }],
-    },
-  });
   assert.equal(next.latest.status, 'failed');
   assert.equal(next.latest.current, null);
   assert.equal(next.latest.last_success, null);

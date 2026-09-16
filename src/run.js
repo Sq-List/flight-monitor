@@ -35,10 +35,10 @@ export async function runCollection({
         date: query.depart_date,
         status: 'failed',
       })),
-      itineraries: [],
+      flights: [],
       errors: [{
         date: null,
-        stage: error?.stage ?? 'outbound_list',
+        stage: error?.stage ?? 'flight_list',
         code: error?.code ?? 'unexpected',
         message: error instanceof Error ? error.message : String(error),
       }],

@@ -7,9 +7,9 @@ import { parseFlightCards } from '../src/parser.js';
 const chunks = JSON.parse(
   await readFile(new URL('./fixtures/flight-card-chunks.json', import.meta.url), 'utf8'),
 );
-const sourceUrl = 'https://flights.ctrip.com/online/list/round-hgh-urc?depdate=2026-10-01_2026-10-08';
+const sourceUrl = 'https://flights.ctrip.com/online/list/oneway-urc-hgh?depdate=2026-10-08';
 
-test('parses complete round-trip flight cards and drops incomplete cards', () => {
+test('parses complete one-way flight cards and drops incomplete cards', () => {
   const quotes = parseFlightCards(chunks, sourceUrl);
 
   assert.equal(quotes.length, 2);

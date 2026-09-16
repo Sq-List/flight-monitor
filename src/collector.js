@@ -6,24 +6,18 @@ import {
   launchAnonymousChromiumInBackground,
   launchVisibleChromiumInBackground,
 } from './macos-focus.js';
-import {
-  isEligibleOutbound,
-  isEligibleReturn,
-  rankItineraries,
-  selectOutboundCandidates,
-  validateCompleteItinerary,
-} from './itinerary.js';
+import { rankReturnFlights } from './itinerary.js';
 
 // 只有任务明确关闭无头模式时才显示浏览器，其他调用保持现有默认行为。
 export function headlessFromEnvironment(environment = process.env) {
   return environment.FLIGHT_MONITOR_HEADLESS !== 'false';
 }
 
-// 根据查询条件构造携程往返航班页面地址。
+// 根据查询条件构造携程单程航班页面地址。
 export function buildSearchUrl(query) {
   const route = `${query.from.toLowerCase()}-${query.to.toLowerCase()}`;
-  return `https://flights.ctrip.com/online/list/round-${route}`
-    + `?depdate=${query.depart_date}_${query.return_date}`
+  return `https://flights.ctrip.com/online/list/oneway-${route}`
+    + `?depdate=${query.depart_date}`
     + '&cabin=Y_S_C_F&adult=1&child=0&infant=0';
 }
 
@@ -47,14 +41,10 @@ export async function launchBrowserForCollection({
 function normalizedError(error, date) {
   return {
     date,
-    stage: error?.stage ?? 'outbound_list',
+    stage: error?.stage ?? 'flight_list',
     code: error?.code ?? 'unexpected',
     message: error instanceof Error ? error.message : String(error),
   };
-}
-
-function publicLeg({ signature, price, ...leg }) {
-  return leg;
 }
 
 function deadlineError() {
@@ -80,8 +70,8 @@ async function withinDeadline(promise, deadline) {
   }
 }
 
-// 顺序扫描两个去程日期；单日失败不丢弃另一日期已经完成的有效组合。
-export async function collectItineraries({
+// 顺序扫描单程查询，保存所有满足返程规则的航班。
+export async function collectReturnFlights({
   queries,
   session,
   timeoutMs = 600_000,
@@ -89,7 +79,7 @@ export async function collectItineraries({
   now = Date.now,
 }) {
   const scans = [];
-  const combinations = [];
+  const flights = [];
   const errors = [];
   const deadline = Date.now() + timeoutMs;
   const runStartedAt = now();
@@ -98,65 +88,12 @@ export async function collectItineraries({
     const query = queries[queryIndex];
     const dateStartedAt = now();
     try {
-      const allOutbounds = await withinDeadline(
-        session.listOutbounds(query),
-        deadline,
-      );
-      const eligibleCount = allOutbounds.filter(isEligibleOutbound).length;
-      const outbounds = selectOutboundCandidates(allOutbounds);
+      const cards = await withinDeadline(session.listFlights(query), deadline);
+      const accepted = rankReturnFlights(cards);
+      flights.push(...accepted.map(({ rank, signature, ...flight }) => flight));
+      scans.push({ date: query.depart_date, status: 'completed' });
       logger(
-        `[${query.depart_date}] 合格去程 ${eligibleCount}，选取 ${outbounds.length}`,
-      );
-
-      let candidateFailed = false;
-      for (let index = 0; index < outbounds.length; index += 1) {
-        const outbound = outbounds[index];
-        logger(
-          `[${query.depart_date}] 候选 ${index + 1}/${outbounds.length} `
-          + `${outbound.flight_no} ${outbound.departure_time}→${outbound.arrival_time}`,
-        );
-        try {
-          const returns = (await withinDeadline(
-            session.listReturns(query, outbound),
-            deadline,
-          )).filter(isEligibleReturn);
-          let accepted = 0;
-          for (const returnLeg of returns) {
-            if (!returnLeg.price) continue;
-            const combination = {
-              ...returnLeg.price,
-              outbound: publicLeg(outbound),
-              return: publicLeg(returnLeg),
-            };
-            // 只有最终能写入 JSON 的完整组合才计入有效返程和进度日志。
-            if (!validateCompleteItinerary(combination)) continue;
-            combinations.push(combination);
-            accepted += 1;
-          }
-          logger(
-            `[${query.depart_date}] ${outbound.flight_no} 有效返程 ${accepted}，`
-            + `累计组合 ${combinations.length}`,
-          );
-        } catch (error) {
-          const normalized = normalizedError(error, query.depart_date);
-          if (normalized.code === 'captcha' || normalized.code === 'run_timeout') {
-            throw error;
-          }
-          // 单个动态卡片失效时继续其余候选，但不能把本日标记为完整成功。
-          candidateFailed = true;
-          errors.push(normalized);
-          logger(
-            `[${query.depart_date}] ${outbound.flight_no} 候选失败 `
-            + `${normalized.stage}/${normalized.code}: ${normalized.message}`,
-          );
-        }
-      }
-      scans.push({
-        date: query.depart_date,
-        status: candidateFailed ? 'failed' : 'completed',
-      });
-      logger(
-        `[${query.depart_date}] 日期${candidateFailed ? '部分失败' : '完成'}，`
+        `[${query.depart_date}] 航班卡片 ${cards.length}，合格返程 ${accepted.length}，`
         + `耗时 ${now() - dateStartedAt}ms`,
       );
     } catch (error) {
@@ -176,13 +113,9 @@ export async function collectItineraries({
     }
   }
 
-  logger(`整轮完成，耗时 ${now() - runStartedAt}ms，累计组合 ${combinations.length}`);
-
-  return {
-    scans,
-    itineraries: rankItineraries(combinations),
-    errors,
-  };
+  const ranked = rankReturnFlights(flights);
+  logger(`整轮完成，耗时 ${now() - runStartedAt}ms，合格返程 ${ranked.length}`);
+  return { scans, flights: ranked, errors };
 }
 
 // 启动当前环境的 Chromium，并确保成功、失败或超时后都关闭浏览器。
@@ -204,7 +137,7 @@ export async function collectFromCtrip({
       timezoneId: 'Asia/Shanghai',
     });
     const session = createSession({ page, buildSearchUrl, artifactDir });
-    return await collectItineraries({ queries, session, timeoutMs, logger });
+    return await collectReturnFlights({ queries, session, timeoutMs, logger });
   } finally {
     await browser.close();
   }
