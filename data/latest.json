@@ -2,7 +2,7 @@
   "schema_version": 3,
   "collection_scope": "return_one_way",
   "status": "success",
-  "checked_at": "2026-09-16T14:45:43.014+08:00",
+  "checked_at": "2026-09-16T18:30:09.675+08:00",
   "queries": [
     {
       "from": "URC",
@@ -18,7 +18,7 @@
   ],
   "current": {
     "availability": "available",
-    "best_price": 1880,
+    "best_price": 1840,
     "currency": "CNY",
     "flights": [
       {
@@ -37,8 +37,8 @@
             "wait_minutes": 45
           }
         ],
-        "price": 1880,
-        "price_text": "¥1880起经济舱5.3折",
+        "price": 1840,
+        "price_text": "¥1840起经济舱5.2折",
         "price_scope": "flight_starting_price",
         "currency": "CNY"
       },
@@ -195,9 +195,9 @@
   },
   "errors": [],
   "last_success": {
-    "checked_at": "2026-09-16T14:45:43.014+08:00",
+    "checked_at": "2026-09-16T18:30:09.675+08:00",
     "availability": "available",
-    "best_price": 1880,
+    "best_price": 1840,
     "currency": "CNY",
     "flights": [
       {
@@ -216,8 +216,8 @@
             "wait_minutes": 45
           }
         ],
-        "price": 1880,
-        "price_text": "¥1880起经济舱5.3折",
+        "price": 1840,
+        "price_text": "¥1840起经济舱5.2折",
         "price_scope": "flight_starting_price",
         "currency": "CNY"
       },
