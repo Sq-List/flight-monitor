@@ -2,7 +2,7 @@
   "schema_version": 3,
   "collection_scope": "return_one_way",
   "status": "success",
-  "checked_at": "2026-09-16T18:30:09.675+08:00",
+  "checked_at": "2026-09-17T10:30:23.026+08:00",
   "queries": [
     {
       "from": "URC",
@@ -195,7 +195,7 @@
   },
   "errors": [],
   "last_success": {
-    "checked_at": "2026-09-16T18:30:09.675+08:00",
+    "checked_at": "2026-09-17T10:30:23.026+08:00",
     "availability": "available",
     "best_price": 1840,
     "currency": "CNY",
