@@ -2,7 +2,7 @@
   "schema_version": 3,
   "collection_scope": "return_one_way",
   "status": "success",
-  "checked_at": "2026-09-17T14:30:11.413+08:00",
+  "checked_at": "2026-09-17T18:30:20.335+08:00",
   "queries": [
     {
       "from": "URC",
@@ -66,6 +66,22 @@
       {
         "rank": 3,
         "date": "2026-10-08",
+        "airline": "四川航空",
+        "flight_no": "3U4942",
+        "departure_time": "07:40",
+        "departure_airport": "乌鲁木齐天山国际机场",
+        "arrival_time": "13:00",
+        "arrival_airport": "萧山国际机场T3",
+        "service_type": "direct",
+        "stops": [],
+        "price": 1980,
+        "price_text": "¥1980起经济舱6.1折",
+        "price_scope": "flight_starting_price",
+        "currency": "CNY"
+      },
+      {
+        "rank": 4,
+        "date": "2026-10-08",
         "airline": "华夏航空",
         "flight_no": "G59576",
         "departure_time": "07:40",
@@ -80,7 +96,23 @@
         "currency": "CNY"
       },
       {
-        "rank": 4,
+        "rank": 5,
+        "date": "2026-10-08",
+        "airline": "长龙航空",
+        "flight_no": "GJ8968",
+        "departure_time": "07:40",
+        "departure_airport": "乌鲁木齐天山国际机场",
+        "arrival_time": "13:00",
+        "arrival_airport": "萧山国际机场T3",
+        "service_type": "direct",
+        "stops": [],
+        "price": 1980,
+        "price_text": "¥1980起经济舱5折",
+        "price_scope": "flight_starting_price",
+        "currency": "CNY"
+      },
+      {
+        "rank": 6,
         "date": "2026-10-08",
         "airline": "西藏航空",
         "flight_no": "TV2532",
@@ -96,7 +128,7 @@
         "currency": "CNY"
       },
       {
-        "rank": 5,
+        "rank": 7,
         "date": "2026-10-08",
         "airline": "厦门航空",
         "flight_no": "MF5371",
@@ -112,7 +144,7 @@
         "currency": "CNY"
       },
       {
-        "rank": 6,
+        "rank": 8,
         "date": "2026-10-08",
         "airline": "成都航空",
         "flight_no": "EU9232",
@@ -128,7 +160,7 @@
         "currency": "CNY"
       },
       {
-        "rank": 7,
+        "rank": 9,
         "date": "2026-10-08",
         "airline": "南方航空",
         "flight_no": "CZ7178",
@@ -144,7 +176,7 @@
         "currency": "CNY"
       },
       {
-        "rank": 8,
+        "rank": 10,
         "date": "2026-10-08",
         "airline": "东方航空",
         "flight_no": "MU3137",
@@ -163,7 +195,7 @@
   },
   "errors": [],
   "last_success": {
-    "checked_at": "2026-09-17T14:30:11.413+08:00",
+    "checked_at": "2026-09-17T18:30:20.335+08:00",
     "availability": "available",
     "best_price": 1840,
     "currency": "CNY",
@@ -213,6 +245,22 @@
       {
         "rank": 3,
         "date": "2026-10-08",
+        "airline": "四川航空",
+        "flight_no": "3U4942",
+        "departure_time": "07:40",
+        "departure_airport": "乌鲁木齐天山国际机场",
+        "arrival_time": "13:00",
+        "arrival_airport": "萧山国际机场T3",
+        "service_type": "direct",
+        "stops": [],
+        "price": 1980,
+        "price_text": "¥1980起经济舱6.1折",
+        "price_scope": "flight_starting_price",
+        "currency": "CNY"
+      },
+      {
+        "rank": 4,
+        "date": "2026-10-08",
         "airline": "华夏航空",
         "flight_no": "G59576",
         "departure_time": "07:40",
@@ -227,7 +275,23 @@
         "currency": "CNY"
       },
       {
-        "rank": 4,
+        "rank": 5,
+        "date": "2026-10-08",
+        "airline": "长龙航空",
+        "flight_no": "GJ8968",
+        "departure_time": "07:40",
+        "departure_airport": "乌鲁木齐天山国际机场",
+        "arrival_time": "13:00",
+        "arrival_airport": "萧山国际机场T3",
+        "service_type": "direct",
+        "stops": [],
+        "price": 1980,
+        "price_text": "¥1980起经济舱5折",
+        "price_scope": "flight_starting_price",
+        "currency": "CNY"
+      },
+      {
+        "rank": 6,
         "date": "2026-10-08",
         "airline": "西藏航空",
         "flight_no": "TV2532",
@@ -243,7 +307,7 @@
         "currency": "CNY"
       },
       {
-        "rank": 5,
+        "rank": 7,
         "date": "2026-10-08",
         "airline": "厦门航空",
         "flight_no": "MF5371",
@@ -259,7 +323,7 @@
         "currency": "CNY"
       },
       {
-        "rank": 6,
+        "rank": 8,
         "date": "2026-10-08",
         "airline": "成都航空",
         "flight_no": "EU9232",
@@ -275,7 +339,7 @@
         "currency": "CNY"
       },
       {
-        "rank": 7,
+        "rank": 9,
         "date": "2026-10-08",
         "airline": "南方航空",
         "flight_no": "CZ7178",
@@ -291,7 +355,7 @@
         "currency": "CNY"
       },
       {
-        "rank": 8,
+        "rank": 10,
         "date": "2026-10-08",
         "airline": "东方航空",
         "flight_no": "MU3137",
