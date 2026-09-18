@@ -2,7 +2,7 @@
   "schema_version": 3,
   "collection_scope": "return_one_way",
   "status": "success",
-  "checked_at": "2026-09-17T18:30:20.335+08:00",
+  "checked_at": "2026-09-18T10:30:06.734+08:00",
   "queries": [
     {
       "from": "URC",
@@ -190,12 +190,33 @@
         "price_text": "¥2100起经济舱5.4折",
         "price_scope": "flight_starting_price",
         "currency": "CNY"
+      },
+      {
+        "rank": 11,
+        "date": "2026-10-08",
+        "airline": "新海航｜海南航空",
+        "flight_no": "HU7867",
+        "departure_time": "09:15",
+        "departure_airport": "乌鲁木齐天山国际机场",
+        "arrival_time": "16:15",
+        "arrival_airport": "萧山国际机场T3",
+        "service_type": "stopover",
+        "stops": [
+          {
+            "airport": "咸阳国际机场 T3",
+            "wait_minutes": null
+          }
+        ],
+        "price": 2120,
+        "price_text": "¥2120起经济舱6.5折",
+        "price_scope": "flight_starting_price",
+        "currency": "CNY"
       }
     ]
   },
   "errors": [],
   "last_success": {
-    "checked_at": "2026-09-17T18:30:20.335+08:00",
+    "checked_at": "2026-09-18T10:30:06.734+08:00",
     "availability": "available",
     "best_price": 1840,
     "currency": "CNY",
@@ -367,6 +388,27 @@
         "stops": [],
         "price": 2100,
         "price_text": "¥2100起经济舱5.4折",
+        "price_scope": "flight_starting_price",
+        "currency": "CNY"
+      },
+      {
+        "rank": 11,
+        "date": "2026-10-08",
+        "airline": "新海航｜海南航空",
+        "flight_no": "HU7867",
+        "departure_time": "09:15",
+        "departure_airport": "乌鲁木齐天山国际机场",
+        "arrival_time": "16:15",
+        "arrival_airport": "萧山国际机场T3",
+        "service_type": "stopover",
+        "stops": [
+          {
+            "airport": "咸阳国际机场 T3",
+            "wait_minutes": null
+          }
+        ],
+        "price": 2120,
+        "price_text": "¥2120起经济舱6.5折",
         "price_scope": "flight_starting_price",
         "currency": "CNY"
       }
