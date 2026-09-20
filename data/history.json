@@ -33035,5 +33035,239 @@
       ]
     },
     "errors": []
+  },
+  {
+    "schema_version": 3,
+    "collection_scope": "return_one_way",
+    "status": "success",
+    "checked_at": "2026-09-20T10:30:11.225+08:00",
+    "queries": [
+      {
+        "from": "URC",
+        "to": "HGH",
+        "depart_date": "2026-10-08"
+      }
+    ],
+    "scans": [
+      {
+        "date": "2026-10-08",
+        "status": "completed"
+      }
+    ],
+    "current": {
+      "availability": "available",
+      "best_price": 1420,
+      "currency": "CNY",
+      "flights": [
+        {
+          "rank": 1,
+          "date": "2026-10-08",
+          "airline": "华夏航空 G59533K",
+          "flight_no": "G59533K/G54119/MU6914",
+          "departure_time": "20:35",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "01:00",
+          "arrival_airport": "萧山国际机场T3",
+          "service_type": "direct",
+          "stops": [],
+          "price": 1420,
+          "price_text": "¥1420起经济舱经济舱",
+          "price_scope": "flight_starting_price",
+          "currency": "CNY"
+        },
+        {
+          "rank": 2,
+          "date": "2026-10-08",
+          "airline": "新海航｜天津航空",
+          "flight_no": "GS7519",
+          "departure_time": "08:15",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "14:50",
+          "arrival_airport": "萧山国际机场T3",
+          "service_type": "stopover",
+          "stops": [
+            {
+              "airport": "金川机场",
+              "wait_minutes": 45
+            }
+          ],
+          "price": 1840,
+          "price_text": "¥1840起经济舱5.2折",
+          "price_scope": "flight_starting_price",
+          "currency": "CNY"
+        },
+        {
+          "rank": 3,
+          "date": "2026-10-08",
+          "airline": "新海航｜乌鲁木齐航空",
+          "flight_no": "UQ2593",
+          "departure_time": "10:30",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "17:15",
+          "arrival_airport": "萧山国际机场T3",
+          "service_type": "stopover",
+          "stops": [
+            {
+              "airport": "成县机场",
+              "wait_minutes": null
+            }
+          ],
+          "price": 1900,
+          "price_text": "¥1900起经济舱4.8折",
+          "price_scope": "flight_starting_price",
+          "currency": "CNY"
+        },
+        {
+          "rank": 4,
+          "date": "2026-10-08",
+          "airline": "四川航空",
+          "flight_no": "3U4942",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "service_type": "direct",
+          "stops": [],
+          "price": 1980,
+          "price_text": "¥1980起经济舱6.1折",
+          "price_scope": "flight_starting_price",
+          "currency": "CNY"
+        },
+        {
+          "rank": 5,
+          "date": "2026-10-08",
+          "airline": "华夏航空",
+          "flight_no": "G59576",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "service_type": "direct",
+          "stops": [],
+          "price": 1980,
+          "price_text": "¥1980起经济舱5折",
+          "price_scope": "flight_starting_price",
+          "currency": "CNY"
+        },
+        {
+          "rank": 6,
+          "date": "2026-10-08",
+          "airline": "长龙航空",
+          "flight_no": "GJ8968",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "service_type": "direct",
+          "stops": [],
+          "price": 1980,
+          "price_text": "¥1980起经济舱5折",
+          "price_scope": "flight_starting_price",
+          "currency": "CNY"
+        },
+        {
+          "rank": 7,
+          "date": "2026-10-08",
+          "airline": "西藏航空",
+          "flight_no": "TV2532",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "service_type": "direct",
+          "stops": [],
+          "price": 1980,
+          "price_text": "¥1980起经济舱5折",
+          "price_scope": "flight_starting_price",
+          "currency": "CNY"
+        },
+        {
+          "rank": 8,
+          "date": "2026-10-08",
+          "airline": "厦门航空",
+          "flight_no": "MF5371",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "service_type": "direct",
+          "stops": [],
+          "price": 2000,
+          "price_text": "¥2000起经济舱5.1折",
+          "price_scope": "flight_starting_price",
+          "currency": "CNY"
+        },
+        {
+          "rank": 9,
+          "date": "2026-10-08",
+          "airline": "成都航空",
+          "flight_no": "EU9232",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "service_type": "direct",
+          "stops": [],
+          "price": 2060,
+          "price_text": "¥2060起经济舱5.3折",
+          "price_scope": "flight_starting_price",
+          "currency": "CNY"
+        },
+        {
+          "rank": 10,
+          "date": "2026-10-08",
+          "airline": "南方航空",
+          "flight_no": "CZ7178",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "service_type": "direct",
+          "stops": [],
+          "price": 2100,
+          "price_text": "¥2100起经济舱6.5折",
+          "price_scope": "flight_starting_price",
+          "currency": "CNY"
+        },
+        {
+          "rank": 11,
+          "date": "2026-10-08",
+          "airline": "东方航空",
+          "flight_no": "MU3137",
+          "departure_time": "07:40",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "13:00",
+          "arrival_airport": "萧山国际机场T3",
+          "service_type": "direct",
+          "stops": [],
+          "price": 2100,
+          "price_text": "¥2100起经济舱5.4折",
+          "price_scope": "flight_starting_price",
+          "currency": "CNY"
+        },
+        {
+          "rank": 12,
+          "date": "2026-10-08",
+          "airline": "新海航｜海南航空",
+          "flight_no": "HU7867",
+          "departure_time": "09:15",
+          "departure_airport": "乌鲁木齐天山国际机场",
+          "arrival_time": "16:15",
+          "arrival_airport": "萧山国际机场T3",
+          "service_type": "stopover",
+          "stops": [
+            {
+              "airport": "咸阳国际机场 T3",
+              "wait_minutes": null
+            }
+          ],
+          "price": 2120,
+          "price_text": "¥2120起经济舱6.5折",
+          "price_scope": "flight_starting_price",
+          "currency": "CNY"
+        }
+      ]
+    },
+    "errors": []
   }
 ]
